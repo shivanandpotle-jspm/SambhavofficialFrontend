@@ -12,8 +12,8 @@ import { AdminLayout } from "@/components/layout/AdminLayout";
 /* ===== Public Pages ===== */
 import { HomePage } from "@/pages/HomePage";
 import { AboutPage } from "@/pages/AboutPage";
-import { EventsPage } from "@/pages/EventsPage";
-import { EventDetailPage } from "@/pages/EventDetailPage";
+import EventsPage from "@/pages/EventsPage";
+import EventDetailPage from "@/pages/EventDetailPage";
 import { GalleryPage } from "@/pages/GalleryPage";
 import { TeamPage } from "@/pages/TeamPage";
 import { DonatePage } from "@/pages/DonatePage";
@@ -21,12 +21,13 @@ import { MembershipPage } from "@/pages/MembershipPage";
 import { VolunteerPage } from "@/pages/VolunteerPage";
 
 /* ===== Admin Pages ===== */
-import { AdminLogin } from "@/pages/admin/AdminLogin";
-import { AdminDashboard } from "@/pages/admin/AdminDashboard";
+import AdminLogin from "@/pages/admin/AdminLogin";
+import AdminDashboard from "@/pages/admin/AdminDashboard"; // ✅ FIXED
 import AdminEvents from "@/pages/admin/AdminEvents";
 import AdminSettings from "@/pages/admin/AdminSettings";
+import AdminRegistrations from "@/pages/admin/AdminRegistrations";
 
-/* ===== Scanner Page (NOT inside admin) ===== */
+/* ===== Scanner Page ===== */
 import ScanTicketPage from "@/pages/ScanTicketPage";
 
 /* ===== Misc ===== */
@@ -44,7 +45,6 @@ const App = () => {
 
           <BrowserRouter>
             <Routes>
-
               {/* ================= PUBLIC ROUTES ================= */}
               <Route element={<PublicLayout />}>
                 <Route path="/" element={<HomePage />} />
@@ -58,22 +58,22 @@ const App = () => {
                 <Route path="/volunteer" element={<VolunteerPage />} />
               </Route>
 
-              {/* ================= AUTH / ADMIN ================= */}
+              {/* ================= AUTH ================= */}
               <Route path="/admin/login" element={<AdminLogin />} />
 
+              {/* ================= ADMIN ================= */}
               <Route path="/admin" element={<AdminLayout />}>
                 <Route index element={<AdminDashboard />} />
                 <Route path="events" element={<AdminEvents />} />
+                <Route path="registrations" element={<AdminRegistrations />} />
                 <Route path="settings" element={<AdminSettings />} />
               </Route>
 
-              {/* ================= TICKET SCANNER ================= */}
-              {/* Used by volunteers / gate staff */}
+              {/* ================= SCANNER ================= */}
               <Route path="/scan" element={<ScanTicketPage />} />
 
               {/* ================= 404 ================= */}
               <Route path="*" element={<NotFound />} />
-
             </Routes>
           </BrowserRouter>
         </TooltipProvider>

@@ -4,7 +4,13 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import type { FormField } from '@/contexts/AdminContext';
 
 interface DynamicFormRendererProps {
@@ -27,6 +33,39 @@ export const DynamicFormRenderer: React.FC<DynamicFormRendererProps> = ({
     setValue,
     watch,
   } = useForm();
+
+  /**
+   * 🔑 NORMALIZE FORM DATA
+   * Ensures name/email/phone ALWAYS exist
+   */
+  const normalizeAndSubmit = (rawData: Record<string, unknown>) => {
+    const normalizedData: Record<string, unknown> = { ...rawData };
+
+    fields.forEach((field) => {
+      const value = rawData[field.id];
+
+      if (!value) return;
+
+      const label = field.label.toLowerCase();
+
+      if (!normalizedData.name && label.includes('name')) {
+        normalizedData.name = value;
+      }
+
+      if (!normalizedData.email && label.includes('email')) {
+        normalizedData.email = value;
+      }
+
+      if (
+        !normalizedData.phone &&
+        (label.includes('phone') || label.includes('mobile'))
+      ) {
+        normalizedData.phone = value;
+      }
+    });
+
+    onSubmit(normalizedData);
+  };
 
   const renderField = (field: FormField) => {
     const commonProps = {
@@ -53,7 +92,12 @@ export const DynamicFormRenderer: React.FC<DynamicFormRendererProps> = ({
       case 'text':
       case 'email':
       case 'phone':
-        return <Input type={field.type === 'phone' ? 'tel' : field.type} {...commonProps} />;
+        return (
+          <Input
+            type={field.type === 'phone' ? 'tel' : field.type}
+            {...commonProps}
+          />
+        );
 
       case 'number':
         return <Input type="number" {...commonProps} />;
@@ -71,7 +115,9 @@ export const DynamicFormRenderer: React.FC<DynamicFormRendererProps> = ({
             value={watch(field.id)}
           >
             <SelectTrigger>
-              <SelectValue placeholder={field.placeholder || 'Select an option'} />
+              <SelectValue
+                placeholder={field.placeholder || 'Select an option'}
+              />
             </SelectTrigger>
             <SelectContent>
               {(field.options || []).map((option, index) => (
@@ -89,14 +135,21 @@ export const DynamicFormRenderer: React.FC<DynamicFormRendererProps> = ({
   };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
+    <form
+      onSubmit={handleSubmit(normalizeAndSubmit)}
+      className="space-y-5"
+    >
       {fields.map((field) => (
         <div key={field.id} className="space-y-2">
-          <Label htmlFor={field.id} className="flex items-center gap-1">
+          <Label htmlFor={field.id}>
             {field.label}
-            {field.required && <span className="text-accent">*</span>}
+            {field.required && (
+              <span className="text-accent ml-1">*</span>
+            )}
           </Label>
+
           {renderField(field)}
+
           {errors[field.id] && (
             <p className="text-sm text-destructive">
               {errors[field.id]?.message as string}
@@ -105,9 +158,17 @@ export const DynamicFormRenderer: React.FC<DynamicFormRendererProps> = ({
         </div>
       ))}
 
-      <Button type="submit" variant="hero" size="lg" disabled={isLoading} className="w-full mt-6">
+      <Button
+        type="submit"
+        variant="hero"
+        size="lg"
+        disabled={isLoading}
+        className="w-full mt-6"
+      >
         {isLoading ? 'Processing...' : submitLabel}
       </Button>
     </form>
   );
 };
+
+export default DynamicFormRenderer;

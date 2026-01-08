@@ -148,9 +148,7 @@ export const AboutPage: React.FC = () => {
               About <span className="text-gradient">Sambhav</span> Foundation
             </h1>
             <p className="text-lg text-muted-foreground leading-relaxed">
-              We are a non-profit organization transforming lives through
-              financial education, mental wellness, entrepreneurship, and
-              community-driven initiatives.
+             Sambhav  is a youth-led community based in Pune and PCMC, driven by the belief that everything is possible when passion meets purpose. Formed by a group of young changemakers, Sambhav is a platform that empowers students to lead, innovate, and serve society through meaningful initiatives. With a strong team of 95+ volunteers, primarily engineering students from different colleges, Sambhav works in diverse domains such as innovation, social service, youth empowerment, entrepreneurship, financial literacy, and mental & physical fitness. Our Mission To empower the youth and transform the future by building a culture of leadership, creativity, and social responsibility. Our Vision To create a society where every young mind believes in its potential and contributes to positive change. Our Key Work Areas 🌱 Social Service: Donation drives, awareness campaigns, and rural outreach activities for the underprivileged. 💡 Innovation & Entrepreneurship: Hackathons, idea challenges, and summits promoting creative problem-solving. 💬 Youth Empowerment: Skill development sessions, motivational talks, and leadership programs. 🧠 Mental & Physical Fitness: Activities promoting mindfulness, fitness, and emotional well-being. 💰 Financial Literacy: Sessions and content aimed at improving financial awareness among students.
             </p>
           </motion.div>
         </motion.div>

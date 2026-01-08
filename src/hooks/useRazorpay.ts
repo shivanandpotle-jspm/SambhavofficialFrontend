@@ -1,46 +1,20 @@
 import { useCallback } from 'react';
 import { toast } from '@/hooks/use-toast';
 
-interface RazorpayOptions {
-  amount: number;
-  currency?: string;
-  name: string;
-  description: string;
-  orderId?: string;
-  prefill?: {
-    name?: string;
-    email?: string;
-    contact?: string;
-  };
-  theme?: {
-    color?: string;
-  };
-}
-
 interface PaymentResult {
   razorpay_payment_id: string;
-  razorpay_order_id?: string;
-  razorpay_signature?: string;
 }
-
-type PaymentType = 'event' | 'donation' | 'membership';
 
 declare global {
   interface Window {
-    Razorpay: new (options: Record<string, unknown>) => {
-      open: () => void;
-      on: (event: string, callback: () => void) => void;
-    };
+    Razorpay: any;
   }
 }
 
-export const useRazorpay = (keyId: string = 'rzp_test_xxxxx') => {
-  const loadRazorpayScript = useCallback((): Promise<boolean> => {
-    return new Promise((resolve) => {
-      if (window.Razorpay) {
-        resolve(true);
-        return;
-      }
+export const useRazorpay = (keyId?: string) => {
+  const loadScript = () =>
+    new Promise<boolean>((resolve) => {
+      if (window.Razorpay) return resolve(true);
 
       const script = document.createElement('script');
       script.src = 'https://checkout.razorpay.com/v1/checkout.js';
@@ -48,140 +22,88 @@ export const useRazorpay = (keyId: string = 'rzp_test_xxxxx') => {
       script.onerror = () => resolve(false);
       document.body.appendChild(script);
     });
-  }, []);
 
-  const initiatePayment = useCallback(async (
-    paymentType: PaymentType,
-    options: RazorpayOptions,
-    onSuccess: (result: PaymentResult) => void,
-    onFailure?: (error: unknown) => void
-  ) => {
-    const isLoaded = await loadRazorpayScript();
-    
-    if (!isLoaded) {
-      toast({
-        title: 'Error',
-        description: 'Failed to load payment gateway. Please try again.',
-        variant: 'destructive',
-      });
-      return;
-    }
-
-    const paymentTypeLabels: Record<PaymentType, string> = {
-      event: 'Event Ticket',
-      donation: 'Donation',
-      membership: 'Membership Fee',
-    };
-
-    const razorpayOptions = {
-      key: keyId,
-      amount: options.amount * 100, // Convert to paise
-      currency: options.currency || 'INR',
-      name: options.name,
-      description: `${paymentTypeLabels[paymentType]}: ${options.description}`,
-      order_id: options.orderId,
-      handler: (response: PaymentResult) => {
+  const payForEvent = useCallback(
+    async (
+      eventTitle: string,
+      amount: number,
+      user: { name: string; email: string },
+      onSuccess: () => void
+    ) => {
+      if (!keyId) {
         toast({
-          title: 'Payment Successful!',
-          description: `Your ${paymentTypeLabels[paymentType].toLowerCase()} payment was completed successfully.`,
-        });
-        onSuccess(response);
-      },
-      prefill: options.prefill || {},
-      theme: {
-        color: options.theme?.color || '#1a5f5a', // Primary teal color
-      },
-      modal: {
-        ondismiss: () => {
-          toast({
-            title: 'Payment Cancelled',
-            description: 'You cancelled the payment. Please try again when ready.',
-          });
-        },
-      },
-    };
-
-    try {
-      const rzp = new window.Razorpay(razorpayOptions);
-      rzp.on('payment.failed', () => {
-        toast({
-          title: 'Payment Failed',
-          description: 'Your payment could not be processed. Please try again.',
+          title: 'Razorpay Error',
+          description: 'Missing Razorpay key',
           variant: 'destructive',
         });
-        if (onFailure) {
-          onFailure(new Error('Payment failed'));
-        }
-      });
-      rzp.open();
-    } catch (error) {
-      toast({
-        title: 'Error',
-        description: 'Something went wrong. Please try again.',
-        variant: 'destructive',
-      });
-      if (onFailure) {
-        onFailure(error);
+        return;
       }
-    }
-  }, [keyId, loadRazorpayScript]);
 
-  const payForEvent = useCallback((
-    eventTitle: string,
-    amount: number,
-    userInfo: { name?: string; email?: string; phone?: string },
-    onSuccess: (result: PaymentResult) => void
-  ) => {
-    initiatePayment('event', {
-      amount,
-      name: 'Empower Foundation',
-      description: eventTitle,
-      prefill: {
-        name: userInfo.name,
-        email: userInfo.email,
-        contact: userInfo.phone,
-      },
-    }, onSuccess);
-  }, [initiatePayment]);
+      const loaded = await loadScript();
+      if (!loaded) {
+        toast({
+          title: 'Error',
+          description: 'Failed to load Razorpay',
+          variant: 'destructive',
+        });
+        return;
+      }
 
-  const makeDonation = useCallback((
-    amount: number,
-    donorInfo: { name?: string; email?: string; phone?: string },
-    onSuccess: (result: PaymentResult) => void
-  ) => {
-    initiatePayment('donation', {
-      amount,
-      name: 'Empower Foundation',
-      description: 'Charitable Donation',
-      prefill: {
-        name: donorInfo.name,
-        email: donorInfo.email,
-        contact: donorInfo.phone,
-      },
-    }, onSuccess);
-  }, [initiatePayment]);
+      const rzp = new window.Razorpay({
+        key: keyId,
+        amount: amount * 100,
+        currency: 'INR',
+        name: 'Sambhav',
+        description: eventTitle,
+        handler: async (response: PaymentResult) => {
+          try {
+            const res = await fetch(
+              'http://localhost:5000/api/verify-payment',
+              {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  razorpay_payment_id: response.razorpay_payment_id,
+                  eventTitle,
+                  name: user.name,
+                  email: user.email,
+                }),
+              }
+            );
 
-  const payMembershipFee = useCallback((
-    amount: number,
-    memberInfo: { name?: string; email?: string; phone?: string },
-    onSuccess: (result: PaymentResult) => void
-  ) => {
-    initiatePayment('membership', {
-      amount,
-      name: 'Empower Foundation',
-      description: 'Annual Membership',
-      prefill: {
-        name: memberInfo.name,
-        email: memberInfo.email,
-        contact: memberInfo.phone,
-      },
-    }, onSuccess);
-  }, [initiatePayment]);
+            const data = await res.json();
 
-  return {
-    initiatePayment,
-    payForEvent,
-    makeDonation,
-    payMembershipFee,
-  };
+            if (!data.success) {
+              throw new Error(data.message);
+            }
+
+            toast({
+              title: 'Payment Successful',
+              description: 'Ticket email sent successfully',
+            });
+
+            onSuccess();
+          } catch (err) {
+            toast({
+              title: 'Email Error',
+              description: 'Payment done, but email failed',
+              variant: 'destructive',
+            });
+          }
+        },
+        prefill: {
+          name: user.name,
+          email: user.email,
+        },
+        theme: {
+          color: '#17a8db',
+        },
+      });
+
+      rzp.open();
+    },
+    [keyId]
+  );
+
+  return { payForEvent };
 };

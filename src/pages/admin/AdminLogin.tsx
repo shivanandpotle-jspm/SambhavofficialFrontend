@@ -23,47 +23,69 @@ export const AdminLogin: React.FC = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
 
-    // TEMP AUTH — event safe
-    setTimeout(() => {
-      if (!email || !password) {
-        toast({
-          title: 'Login Failed',
-          description: 'Please enter valid credentials.',
-          variant: 'destructive',
-        });
-        setIsLoading(false);
-        return;
-      }
-
-      localStorage.setItem('adminLoggedIn', 'true');
-      localStorage.setItem('loginType', loginType);
-
-      toast({
-        title: 'Login Successful',
-        description:
-          loginType === 'admin'
-            ? 'Welcome to the admin panel.'
-            : 'Scanner mode activated.',
+    try {
+      // Connect to your Node.js backend API
+      const response = await fetch('http://localhost:5000/api/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        // Backend expects 'username', mapping email state to it
+        body: JSON.stringify({ 
+          username: email, 
+          password: password 
+        }),
       });
 
-      // ✅ CORRECT ROUTING
-      if (loginType === 'admin') {
-        navigate('/admin');
-      } else {
-        navigate('/scan');
-      }
+      const data = await response.json();
 
+      if (response.ok && data.success) {
+        // Store session state locally for frontend protection
+        localStorage.setItem('adminLoggedIn', 'true');
+        localStorage.setItem('loginType', loginType);
+
+        toast({
+          title: 'Login Successful',
+          description:
+            loginType === 'admin'
+              ? 'Welcome to the admin panel.'
+              : 'Scanner mode activated.',
+        });
+
+        // Redirect based on the chosen mode
+        if (loginType === 'admin') {
+          navigate('/admin');
+        } else {
+          navigate('/scan');
+        }
+      } else {
+        // Handle invalid credentials from backend
+        toast({
+          title: 'Login Failed',
+          description: data.message || 'Invalid credentials.',
+          variant: 'destructive',
+        });
+      }
+    } catch (error) {
+      // Handle network or server errors
+      toast({
+        title: 'Server Error',
+        description: 'Could not connect to the backend. Ensure it is running on port 5000.',
+        variant: 'destructive',
+      });
+      console.error('Login error:', error);
+    } finally {
       setIsLoading(false);
-    }, 700);
+    }
   };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 flex items-center justify-center p-4">
-      {/* Glow */}
+      {/* Background Glow Effects */}
       <div className="absolute inset-0 overflow-hidden">
         <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
         <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent/10 rounded-full blur-3xl" />
@@ -79,7 +101,7 @@ export const AdminLogin: React.FC = () => {
         </CardHeader>
 
         <CardContent>
-          {/* LOGIN MODE */}
+          {/* LOGIN MODE SELECTION */}
           <div className="mb-6 space-y-3">
             <Label>Login Mode</Label>
             <div className="flex gap-6">
@@ -105,17 +127,18 @@ export const AdminLogin: React.FC = () => {
             </div>
           </div>
 
-          {/* FORM */}
+          {/* LOGIN FORM */}
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
-              <Label>Email</Label>
+              <Label>Username / Email</Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input
-                  type="email"
+                  type="text"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="pl-10"
+                  placeholder="Enter your username"
                   required
                 />
               </div>
