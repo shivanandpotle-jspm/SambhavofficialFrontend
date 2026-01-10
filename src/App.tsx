@@ -19,10 +19,12 @@ import { TeamPage } from "@/pages/TeamPage";
 import { DonatePage } from "@/pages/DonatePage";
 import { MembershipPage } from "@/pages/MembershipPage";
 import { VolunteerPage } from "@/pages/VolunteerPage";
+import TermsAndConditions from "@/pages/TermsAndConditions";
+import PrivacyPolicy from "@/pages/PrivacyPolicy";
 
 /* ===== Admin Pages ===== */
 import AdminLogin from "@/pages/admin/AdminLogin";
-import AdminDashboard from "@/pages/admin/AdminDashboard"; // ✅ FIXED
+import AdminDashboard from "@/pages/admin/AdminDashboard";
 import AdminEvents from "@/pages/admin/AdminEvents";
 import AdminSettings from "@/pages/admin/AdminSettings";
 import AdminRegistrations from "@/pages/admin/AdminRegistrations";
@@ -56,6 +58,14 @@ const App = () => {
                 <Route path="/donate" element={<DonatePage />} />
                 <Route path="/membership" element={<MembershipPage />} />
                 <Route path="/volunteer" element={<VolunteerPage />} />
+                <Route
+                  path="/terms-and-conditions"
+                  element={<TermsAndConditions />}
+                />
+                <Route
+                  path="/privacy-policy"
+                  element={<PrivacyPolicy />}
+                />
               </Route>
 
               {/* ================= AUTH ================= */}

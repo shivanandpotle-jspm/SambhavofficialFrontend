@@ -4,9 +4,8 @@ import {
   Mail,
   Phone,
   MapPin,
-  Facebook,
-  Twitter,
   Instagram,
+  Twitter,
   Linkedin,
   ArrowUp,
 } from 'lucide-react';
@@ -63,7 +62,6 @@ export const Footer: React.FC = () => {
           {/* Brand */}
           <div className="space-y-4">
             <Link to="/" className="flex items-center">
-              {/* ✅ LOGO ONLY */}
               <img
                 src={sambhavLogo}
                 alt="Sambhav Logo"
@@ -135,9 +133,9 @@ export const Footer: React.FC = () => {
               <li className="flex items-start gap-3">
                 <MapPin className="h-5 w-5 mt-0.5 text-secondary" />
                 <span className="text-primary-foreground/80">
-                  123 Community Center Road
+                  JSPM's Rajarshi Shahu College of Engineering, Tathawade
                   <br />
-                  Mumbai, Maharashtra 400001
+                  Pune, Maharashtra 411033
                 </span>
               </li>
               <li className="flex items-center gap-3">
@@ -152,34 +150,68 @@ export const Footer: React.FC = () => {
               <li className="flex items-center gap-3">
                 <Mail className="h-5 w-5 text-secondary" />
                 <a
-                  href="mailto:hello@empower.org"
+                  href="mailto:sambhav.team.official@gmail.com"
                   className="text-primary-foreground/80 hover:text-secondary transition-colors"
                 >
-                  hello@empower.org
+                  support@sambhavimpact.org
                 </a>
               </li>
             </ul>
 
             {/* Social Links */}
             <div className="flex items-center gap-3 mt-6">
-              {[Facebook, Twitter, Instagram, Linkedin].map((Icon, index) => (
-                <a
-                  key={index}
-                  href="#"
-                  className="w-10 h-10 rounded-full bg-primary-foreground/10 flex items-center justify-center hover:bg-secondary hover:text-secondary-foreground transition-all duration-300"
-                >
-                  <Icon className="h-5 w-5" />
-                </a>
-              ))}
+              <a
+                href="https://www.instagram.com/sambhav.official"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 rounded-full bg-primary-foreground/10 flex items-center justify-center hover:bg-secondary hover:text-secondary-foreground transition-all duration-300"
+              >
+                <Instagram className="h-5 w-5" />
+              </a>
+
+              <a
+                href="https://x.com/Sambhav_Youth"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 rounded-full bg-primary-foreground/10 flex items-center justify-center hover:bg-secondary hover:text-secondary-foreground transition-all duration-300"
+              >
+                <Twitter className="h-5 w-5" />
+              </a>
+
+              <a
+                href="https://www.linkedin.com/company/sambhav-club"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="w-10 h-10 rounded-full bg-primary-foreground/10 flex items-center justify-center hover:bg-secondary hover:text-secondary-foreground transition-all duration-300"
+              >
+                <Linkedin className="h-5 w-5" />
+              </a>
             </div>
           </div>
         </div>
 
         {/* Bottom Bar */}
         <div className="border-t border-primary-foreground/20 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <p className="text-sm text-primary-foreground/60">
-            © {new Date().getFullYear()} Sambhav Foundation. All rights reserved.
-          </p>
+          <div className="flex flex-col sm:flex-row items-center gap-4 text-sm text-primary-foreground/60">
+            <span>
+              © {new Date().getFullYear()} Sambhav Foundation. All rights reserved.
+            </span>
+            <div className="flex gap-4">
+              <Link
+                to="/terms-and-conditions"
+                className="hover:text-secondary transition-colors"
+              >
+                Terms & Conditions
+              </Link>
+              <Link
+                to="/privacy-policy"
+                className="hover:text-secondary transition-colors"
+              >
+                Privacy Policy
+              </Link>
+            </div>
+          </div>
+
           <Button
             variant="ghost"
             size="icon"

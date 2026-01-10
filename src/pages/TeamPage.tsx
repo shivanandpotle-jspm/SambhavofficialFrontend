@@ -7,7 +7,7 @@ import { Linkedin, Twitter, Instagram, Users } from "lucide-react";
 import { useAdmin } from "@/contexts/AdminContext";
 
 /* =====================
-   Animation Variants
+   Animations
 ===================== */
 
 const container: Variants = {
@@ -47,22 +47,19 @@ export const TeamPage: React.FC = () => {
   const getRoleCategory = (
     role: string
   ): "leadership" | "core" | "volunteer" => {
-    const lowerRole = role.toLowerCase();
+    const lower = role.toLowerCase();
     if (
-      lowerRole.includes("founder") ||
-      lowerRole.includes("ceo") ||
-      lowerRole.includes("director") ||
-      lowerRole.includes("head")
-    ) {
+      lower.includes("founder") ||
+      lower.includes("director") ||
+      lower.includes("head")
+    )
       return "leadership";
-    }
     if (
-      lowerRole.includes("manager") ||
-      lowerRole.includes("lead") ||
-      lowerRole.includes("coordinator")
-    ) {
+      lower.includes("lead") ||
+      lower.includes("manager") ||
+      lower.includes("coordinator")
+    )
       return "core";
-    }
     return "volunteer";
   };
 
@@ -80,7 +77,7 @@ export const TeamPage: React.FC = () => {
     member,
     featured = false,
   }: {
-    member: typeof teamMembers[0];
+    member: typeof teamMembers[number];
     featured?: boolean;
   }) => (
     <motion.div variants={fadeUp} whileHover="hover">
@@ -109,22 +106,34 @@ export const TeamPage: React.FC = () => {
               {/* Social Overlay */}
               <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 via-foreground/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4">
                 <div className="flex items-center gap-2">
-                  {member.socialLinks.linkedin && (
-                    <a href={member.socialLinks.linkedin} target="_blank">
+                  {member.socialLinks?.linkedin && (
+                    <a
+                      href={member.socialLinks.linkedin}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
                       <Button variant="glass" size="icon" className="h-9 w-9">
                         <Linkedin className="h-4 w-4" />
                       </Button>
                     </a>
                   )}
-                  {member.socialLinks.twitter && (
-                    <a href={member.socialLinks.twitter} target="_blank">
+                  {member.socialLinks?.twitter && (
+                    <a
+                      href={member.socialLinks.twitter}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
                       <Button variant="glass" size="icon" className="h-9 w-9">
                         <Twitter className="h-4 w-4" />
                       </Button>
                     </a>
                   )}
-                  {member.socialLinks.instagram && (
-                    <a href={member.socialLinks.instagram} target="_blank">
+                  {member.socialLinks?.instagram && (
+                    <a
+                      href={member.socialLinks.instagram}
+                      target="_blank"
+                      rel="noreferrer"
+                    >
                       <Button variant="glass" size="icon" className="h-9 w-9">
                         <Instagram className="h-4 w-4" />
                       </Button>
@@ -157,7 +166,6 @@ export const TeamPage: React.FC = () => {
     <div className="pt-24 overflow-hidden">
       {/* HERO */}
       <section className="py-16 bg-gradient-section relative overflow-hidden">
-        <div className="absolute inset-0 bg-hero-pattern" />
         <motion.div
           className="container mx-auto px-4 relative z-10"
           variants={container}
@@ -178,24 +186,20 @@ export const TeamPage: React.FC = () => {
         </motion.div>
       </section>
 
+      {/* EMPTY STATE */}
+      {teamMembers.length === 0 && (
+        <div className="py-16 text-center text-muted-foreground">
+          Team information will be updated soon.
+        </div>
+      )}
+
       {/* LEADERSHIP */}
       {leadership.length > 0 && (
         <section className="py-16 bg-background">
           <div className="container mx-auto px-4">
-            <motion.div
-              className="text-center mb-12"
-              variants={fadeUp}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true }}
-            >
-              <h2 className="font-heading text-2xl sm:text-3xl font-bold mb-2">
-                Leadership
-              </h2>
-              <p className="text-muted-foreground">
-                Guiding our mission with vision and dedication
-              </p>
-            </motion.div>
+            <h2 className="text-center text-3xl font-heading font-bold mb-12">
+              Leadership
+            </h2>
 
             <motion.div
               className={`grid ${
@@ -226,20 +230,9 @@ export const TeamPage: React.FC = () => {
       {coreTeam.length > 0 && (
         <section className="py-16 bg-gradient-section">
           <div className="container mx-auto px-4">
-            <motion.div
-              className="text-center mb-12"
-              variants={fadeUp}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true }}
-            >
-              <h2 className="font-heading text-2xl sm:text-3xl font-bold mb-2">
-                Core Team
-              </h2>
-              <p className="text-muted-foreground">
-                The driving force behind our programs
-              </p>
-            </motion.div>
+            <h2 className="text-center text-3xl font-heading font-bold mb-12">
+              Core Team
+            </h2>
 
             <motion.div
               className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
@@ -260,20 +253,9 @@ export const TeamPage: React.FC = () => {
       {volunteers.length > 0 && (
         <section className="py-16 bg-background">
           <div className="container mx-auto px-4">
-            <motion.div
-              className="text-center mb-12"
-              variants={fadeUp}
-              initial="hidden"
-              whileInView="show"
-              viewport={{ once: true }}
-            >
-              <h2 className="font-heading text-2xl sm:text-3xl font-bold mb-2">
-                Volunteers
-              </h2>
-              <p className="text-muted-foreground">
-                Hearts that make our work possible
-              </p>
-            </motion.div>
+            <h2 className="text-center text-3xl font-heading font-bold mb-12">
+              Volunteers
+            </h2>
 
             <motion.div
               className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4"
@@ -316,30 +298,22 @@ export const TeamPage: React.FC = () => {
 
       {/* CTA */}
       <section className="py-16 bg-gradient-hero text-primary-foreground">
-        <motion.div
-          className="container mx-auto px-4 text-center"
-          variants={fadeUp}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true }}
-        >
+        <div className="container mx-auto px-4 text-center">
           <h2
             className="font-heading text-2xl sm:text-3xl font-bold mb-4"
             style={{ color: "#17a8db" }}
           >
             Want to Join Our Team?
           </h2>
-
           <p className="text-primary-foreground/80 max-w-xl mx-auto mb-8">
             We're always looking for passionate individuals who share our vision.
           </p>
-
           <Link to="/membership">
             <Button variant="warm" size="lg">
               Become a Member
             </Button>
           </Link>
-        </motion.div>
+        </div>
       </section>
     </div>
   );

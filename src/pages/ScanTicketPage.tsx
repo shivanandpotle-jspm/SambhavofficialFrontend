@@ -4,7 +4,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
 
-const SCAN_DELAY = 4000; // same as old platform
+const SCAN_DELAY = 4000;
 
 const ScanTicketPage: React.FC = () => {
   const scannerRef = useRef<Html5Qrcode | null>(null);
@@ -12,24 +12,60 @@ const ScanTicketPage: React.FC = () => {
 
   const [isScanning, setIsScanning] = useState(false);
   const [day, setDay] = useState<"1" | "2">("1");
+  const [scannerKey, setScannerKey] = useState(0); // 🔑 forces DOM reset
 
   useEffect(() => {
     return () => {
-      if (scannerRef.current) {
-        scannerRef.current.stop().catch(() => {});
-      }
+      cleanupScanner();
     };
   }, []);
+
+  /* ================= CLEANUP ================= */
+
+  const cleanupScanner = async () => {
+    if (scannerRef.current) {
+      try {
+        await scannerRef.current.stop();
+      } catch {}
+      try {
+        await scannerRef.current.clear();
+      } catch {}
+      scannerRef.current = null;
+    }
+
+    isPausedRef.current = false;
+    setIsScanning(false);
+
+    // 🔥 Force re-mount of qr-reader div
+    setScannerKey((k) => k + 1);
+  };
+
+  /* ================= START ================= */
 
   const startScanner = async () => {
     if (isScanning) return;
 
-    const scanner = new Html5Qrcode("qr-reader");
-    scannerRef.current = scanner;
-
     try {
+      const devices = await Html5Qrcode.getCameras();
+
+      if (!devices || devices.length === 0) {
+        toast({
+          title: "Camera Not Found",
+          description: "No camera devices detected",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      const backCamera =
+        devices.find((d) => d.label.toLowerCase().includes("back")) ||
+        devices[0];
+
+      const scanner = new Html5Qrcode("qr-reader");
+      scannerRef.current = scanner;
+
       await scanner.start(
-        { facingMode: "environment" },
+        backCamera.id,
         { fps: 10, qrbox: { width: 250, height: 250 } },
         async (decodedText) => {
           if (isPausedRef.current) return;
@@ -45,27 +81,27 @@ const ScanTicketPage: React.FC = () => {
               isPausedRef.current = false;
             } catch {}
           }, SCAN_DELAY);
-        },
-        () => {}
+        }
       );
 
       setIsScanning(true);
     } catch (err) {
+      console.error(err);
       toast({
-        title: "Camera Error",
-        description: "Unable to access camera",
+        title: "Camera Permission Denied",
+        description: "Please allow camera access",
         variant: "destructive",
       });
     }
   };
 
+  /* ================= STOP ================= */
+
   const stopScanner = async () => {
-    if (scannerRef.current) {
-      await scannerRef.current.stop().catch(() => {});
-      await scannerRef.current.clear();
-    }
-    setIsScanning(false);
+    await cleanupScanner();
   };
+
+  /* ================= VERIFY ================= */
 
   const verifyTicket = async (ticketId: string) => {
     try {
@@ -97,6 +133,8 @@ const ScanTicketPage: React.FC = () => {
     }
   };
 
+  /* ================= UI ================= */
+
   return (
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
       <Card className="w-full max-w-md">
@@ -105,7 +143,7 @@ const ScanTicketPage: React.FC = () => {
         </CardHeader>
 
         <CardContent className="space-y-4">
-          {/* Day Selector (from old project) */}
+          {/* Day selector */}
           <div className="flex gap-4 justify-center">
             <label className="flex items-center gap-2">
               <input
@@ -125,7 +163,9 @@ const ScanTicketPage: React.FC = () => {
             </label>
           </div>
 
+          {/* Scanner */}
           <div
+            key={scannerKey}
             id="qr-reader"
             className="w-full aspect-square rounded-lg border"
           />
