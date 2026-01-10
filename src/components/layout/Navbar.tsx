@@ -18,8 +18,8 @@ import {
   Home,
   Info,
   Image,
-  Settings,
   HandCoins,
+  Settings,
 } from "lucide-react";
 
 import sambhavLogo from "./../../assets/sambhav_logo.png";
@@ -81,57 +81,10 @@ export const Navbar: React.FC = () => {
             ))}
           </div>
 
-          {/* Desktop Actions */}
+          {/* Desktop Actions - Contribute button REMOVED */}
+          {/* This div is now empty but keeps the spacing structure */}
           <div className="hidden lg:flex items-center gap-3">
-            {/* Admin */}
-            <Link to="/admin/login">
-              <Button variant="ghost" size="sm">
-                <Settings className="h-4 w-4" />
-              </Button>
-            </Link>
-
-            {/* Contribute Dropdown */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  size="sm"
-                  className="font-semibold"
-                  style={{
-                    backgroundColor: "#ebd37e",
-                    color: "#1a1a1a",
-                  }}
-                >
-                  <HandCoins className="h-4 w-4 mr-2" />
-                  Contribute
-                </Button>
-              </DropdownMenuTrigger>
-
-              <DropdownMenuContent align="end" className="w-56">
-                {/* Donate */}
-                <DropdownMenuSub>
-                  <DropdownMenuSubTrigger>
-                    Donate
-                  </DropdownMenuSubTrigger>
-                  <DropdownMenuSubContent>
-                    <DropdownMenuItem asChild>
-                      <Link to="/donate/individual">Individual</Link>
-                    </DropdownMenuItem>
-                    <DropdownMenuItem asChild>
-                      <Link to="/donate/corporate">Corporate</Link>
-                    </DropdownMenuItem>
-                  </DropdownMenuSubContent>
-                </DropdownMenuSub>
-
-                {/* ✅ UPDATED ROUTES */}
-                <DropdownMenuItem asChild>
-                  <Link to="/volunteer">Join Community</Link>
-                </DropdownMenuItem>
-
-                <DropdownMenuItem asChild>
-                  <Link to="/membership">Join Team</Link>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            {/* Contribute button and dropdown have been removed */}
           </div>
 
           {/* Mobile Menu */}
@@ -144,7 +97,6 @@ export const Navbar: React.FC = () => {
 
             <SheetContent side="right" className="w-[300px] bg-card">
               <div className="flex flex-col h-full">
-                {/* Mobile Links */}
                 <div className="flex flex-col gap-2">
                   {navLinks.map((link) => {
                     const Icon = link.icon;
@@ -165,6 +117,7 @@ export const Navbar: React.FC = () => {
                     );
                   })}
 
+                  {/* Admin still accessible in mobile */}
                   <Link
                     to="/admin/login"
                     onClick={() => setIsOpen(false)}
@@ -175,7 +128,6 @@ export const Navbar: React.FC = () => {
                   </Link>
                 </div>
 
-                {/* Mobile Contribute */}
                 <div className="mt-auto pt-6 space-y-3">
                   <Link to="/donate/individual" onClick={() => setIsOpen(false)}>
                     <Button
@@ -195,7 +147,6 @@ export const Navbar: React.FC = () => {
                     </Button>
                   </Link>
 
-                  {/* ✅ UPDATED ROUTES */}
                   <Link to="/volunteer" onClick={() => setIsOpen(false)}>
                     <Button variant="outline" className="w-full">
                       Join Community
