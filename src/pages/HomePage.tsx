@@ -25,7 +25,25 @@ import slide1 from "@/assets/slide1.webp";
 import slide2 from "@/assets/slide2.webp";
 import slide3 from "@/assets/slide3.jpeg";
 
-const slides = [slide1, slide2, slide3];
+const slides = [
+  {
+    image: slide1,
+    link: "/events#financial-literacy",
+    label: "Register for Aarambh ",
+  },
+  {
+    image: slide2,
+    link: "/events#entrepreneurship",
+    label: "Register for Avinya 4.0",
+  },
+  {
+    image: slide3,
+    link: "/events#mental-health",
+    label: "View Mental Health Event",
+  },
+  
+];
+
 
 /* =====================
    TESTIMONIALS (DYNAMIC)
@@ -146,33 +164,52 @@ export const HomePage: React.FC = () => {
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
-  useEffect(() => {
-    intervalRef.current = setInterval(() => {
-      setCurrentSlide((p) => (p + 1) % slides.length);
-      setCurrentTestimonial((p) => (p + 1) % testimonials.length);
-    }, 5000);
-    return () => intervalRef.current && clearInterval(intervalRef.current);
-  }, []);
+  const startAutoPlay = () => {
+  intervalRef.current && clearInterval(intervalRef.current);
+
+  intervalRef.current = setInterval(() => {
+    setCurrentSlide((p) => (p + 1) % slides.length);
+    setCurrentTestimonial((p) => (p + 1) % testimonials.length);
+  }, 5000);
+};
+
+useEffect(() => {
+  startAutoPlay();
+  return () => intervalRef.current && clearInterval(intervalRef.current);
+}, []);
+
+
+const nextSlide = () => {
+  if (intervalRef.current) clearInterval(intervalRef.current);
+  setCurrentSlide((p) => (p + 1) % slides.length);
+  startAutoPlay();
+};
+
+const prevSlide = () => {
+  if (intervalRef.current) clearInterval(intervalRef.current);
+  setCurrentSlide((p) => (p === 0 ? slides.length - 1 : p - 1));
+  startAutoPlay();
+};
+
 
   return (
     <div className="relative overflow-hidden">
       {/* ================= HERO ================= */}
       <section className="min-h-screen bg-hero-pattern flex items-center">
-        <div className="container mx-auto px-4 pt-24 pb-16 text-center">
+        <div className="container mx-auto px-4 pt-20 pb-12 text-center">
           <motion.div variants={container} initial="hidden" animate="show">
-            <motion.div
-              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-8 mx-auto"
+            <motion.img
+              src="/src/assets/sambhav_logo.png"
+              alt="Sambhav Logo"
               variants={fadeUp}
-            >
-              <Sparkles className="h-4 w-4 text-primary" />
-              <span className="text-sm font-medium text-primary">
-                Empowering Communities Since 2020
-              </span>
-            </motion.div>
+              className="h-[9.8rem] w-auto object-contain mb-2 ml-[515px]"
+            />
 
             <motion.h1
-              className="font-heading font-bold mb-10 flex justify-center whitespace-nowrap"
-              style={{ fontSize: "min(8vw, 3.5rem)" }}
+              className="text-center font-heading font-bold mb-4 flex justify-center whitespace-nowrap leading-tight"
+
+              style={{ fontSize: "min(2.8vw, 1.1rem)" }}
+
               variants={fadeUp}
             >
               <span style={{ color: "#ebd37e" }}>•INITIATE</span>
@@ -181,21 +218,56 @@ export const HomePage: React.FC = () => {
               </span>
               <span style={{ color: "#e87037" }}>•EVOLVE</span>
             </motion.h1>
+            <div className="w-24 h-1 bg-gradient-to-r from-transparent via-primary to-transparent mx-auto mb-6 opacity-60" />
 
-            {/* Slider */}
-            <div className="relative w-full max-w-5xl mx-auto h-[26rem] rounded-3xl overflow-hidden shadow-xl">
-              <AnimatePresence mode="wait">
-                <motion.img
-                  key={currentSlide}
-                  src={slides[currentSlide]}
-                  variants={slideVariant}
-                  initial="enter"
-                  animate="center"
-                  exit="exit"
-                  className="absolute inset-0 w-full h-full object-cover"
-                />
-              </AnimatePresence>
-            </div>
+
+          {/* Slider */}
+           <div className="relative w-full max-w-5xl mx-auto h-[26rem] rounded-3xl overflow-hidden shadow-xl">
+
+  <AnimatePresence mode="wait">
+    <motion.img
+      key={currentSlide}
+      src={slides[currentSlide].image}
+      variants={slideVariant}
+      initial="enter"
+      animate="center"
+      exit="exit"
+      className="absolute inset-0 w-full h-full object-cover object-center"
+    />
+  </AnimatePresence>
+
+  <button
+    onClick={prevSlide}
+    className="absolute left-4 top-1/2 -translate-y-1/2 z-10
+               bg-black/40 hover:bg-black/60 text-white
+               p-3 rounded-full backdrop-blur transition"
+  >
+    <ChevronLeft className="h-6 w-6" />
+  </button>
+
+  <button
+    onClick={nextSlide}
+    className="absolute right-4 top-1/2 -translate-y-1/2 z-10
+               bg-black/40 hover:bg-black/60 text-white
+               p-3 rounded-full backdrop-blur transition"
+  >
+    <ChevronRight className="h-6 w-6" />
+  </button>
+</div>
+
+{/* Event CTA Button */}
+    <div className="mt-6 flex justify-center">
+      <a
+        href={slides[currentSlide].link}
+        className="inline-flex items-center gap-2 px-6 py-3
+                  rounded-full bg-primary text-white font-medium
+                  hover:bg-primary/90 transition"
+      >
+        {slides[currentSlide].label}
+      </a>
+    </div>
+
+
 
             {/* Stats */}
             <motion.div
