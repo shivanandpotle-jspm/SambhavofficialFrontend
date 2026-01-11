@@ -21,17 +21,22 @@ interface AdminContextType {
 
 const AdminContext = createContext<AdminContextType | undefined>(undefined);
 
+// ✨ Setup API URL: Points to Render in production, localhost in development
+const API_URL = import.meta.env.VITE_API_URL || "http://localhost:5000";
+
 export const AdminProvider = ({ children }: { children: ReactNode }) => {
   const [events, setEvents] = useState<Event[]>([]);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/events", { credentials: "include" })
+    // Uses the dynamic API_URL
+    fetch(`${API_URL}/api/events`, { credentials: "include" })
       .then(res => res.json()).then(data => setEvents(data?.events || []))
       .catch(err => console.error(err));
   }, []);
 
   const addEvent = async (event: Event) => {
-    const res = await fetch("http://localhost:5000/api/events", {
+    // Uses the dynamic API_URL
+    const res = await fetch(`${API_URL}/api/events`, {
       method: "POST", credentials: "include", headers: { "Content-Type": "application/json" },
       body: JSON.stringify(event),
     });
@@ -40,7 +45,8 @@ export const AdminProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const updateEvent = async (id: string, update: Partial<Event>) => {
-    const res = await fetch(`http://localhost:5000/api/events/${id}`, {
+    // Uses the dynamic API_URL
+    const res = await fetch(`${API_URL}/api/events/${id}`, {
       method: "PUT", credentials: "include", headers: { "Content-Type": "application/json" },
       body: JSON.stringify(update),
     });
@@ -49,7 +55,8 @@ export const AdminProvider = ({ children }: { children: ReactNode }) => {
   };
 
   const deleteEvent = async (id: string) => {
-    const res = await fetch(`http://localhost:5000/api/events/${id}`, { method: "DELETE", credentials: "include" });
+    // Uses the dynamic API_URL
+    const res = await fetch(`${API_URL}/api/events/${id}`, { method: "DELETE", credentials: "include" });
     const data = await res.json();
     if (data.success) setEvents(prev => prev.filter(e => e.id !== id));
   };
