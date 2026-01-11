@@ -16,7 +16,7 @@ import {
   Sparkles,
   ScrollText,
 } from "lucide-react";
-import { useAdmin } from "@/contexts/AdminContext";
+
 import { DynamicFormRenderer } from "@/components/DynamicFormRenderer";
 import { useRazorpay } from "@/hooks/useRazorpay";
 import { toast } from "@/hooks/use-toast";
@@ -247,3 +247,4 @@ const EventDetailPage: React.FC = () => {
 };
 
 export default EventDetailPage;
+
