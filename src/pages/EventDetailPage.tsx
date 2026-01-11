@@ -88,7 +88,7 @@ const EventDetailPage: React.FC = () => {
 
   const verifyAndSave = async (allFormData: any, name: string, email: string) => {
     try {
-      const res = await fetch("http://localhost:5000/api/verify-payment", {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/api/verify-payment`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
@@ -247,3 +247,4 @@ const EventDetailPage: React.FC = () => {
 };
 
 export default EventDetailPage;
+
