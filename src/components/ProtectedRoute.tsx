@@ -1,27 +1,43 @@
-import { Navigate } from "react-router-dom";
+import { Navigate, Outlet } from "react-router-dom";
 import { useEffect, useState } from "react";
 
-export default function ProtectedRoute({
-  children,
-}: {
-  children: JSX.Element;
-}) {
-  const [allowed, setAllowed] = useState<boolean | null>(null);
+const API_URL = import.meta.env.VITE_API_URL;
+
+const ProtectedAdminRoute = () => {
+  const [loading, setLoading] = useState(true);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
-    fetch("http://localhost:5000/api/auth/me", {
-      credentials: "include",
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error("unauth");
-        return res.json();
-      })
-      .then(() => setAllowed(true))
-      .catch(() => setAllowed(false));
+    const checkAuth = async () => {
+      try {
+        const res = await fetch(`${API_URL}/api/auth/me`, {
+          credentials: "include",
+        });
+
+        if (res.ok) {
+          setIsAuthenticated(true);
+        } else {
+          setIsAuthenticated(false);
+        }
+      } catch {
+        setIsAuthenticated(false);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    checkAuth();
   }, []);
 
-  if (allowed === null) return null; // or loader
-  if (!allowed) return <Navigate to="/login" replace />;
+  if (loading) {
+    return null; // or loading spinner
+  }
 
-  return children;
-}
+  if (!isAuthenticated) {
+    return <Navigate to="/admin/login" replace />;
+  }
+
+  return <Outlet />;
+};
+
+export default ProtectedAdminRoute;

@@ -1,9 +1,4 @@
-import { useCallback } from 'react';
-import { toast } from '@/hooks/use-toast';
-
-interface PaymentResult {
-  razorpay_payment_id: string;
-}
+import { useEffect } from "react";
 
 declare global {
   interface Window {
@@ -11,99 +6,56 @@ declare global {
   }
 }
 
-export const useRazorpay = (keyId?: string) => {
-  const loadScript = () =>
-    new Promise<boolean>((resolve) => {
-      if (window.Razorpay) return resolve(true);
+interface UserDetails {
+  name: string;
+  email: string;
+}
 
-      const script = document.createElement('script');
-      script.src = 'https://checkout.razorpay.com/v1/checkout.js';
-      script.onload = () => resolve(true);
-      script.onerror = () => resolve(false);
-      document.body.appendChild(script);
-    });
+type SuccessCallback = (result: any) => void | Promise<void>;
 
-  const payForEvent = useCallback(
-    async (
-      eventTitle: string,
-      amount: number,
-      user: { name: string; email: string },
-      onSuccess: () => void
-    ) => {
-      if (!keyId) {
-        toast({
-          title: 'Razorpay Error',
-          description: 'Missing Razorpay key',
-          variant: 'destructive',
-        });
-        return;
-      }
+export const useRazorpay = (key: string) => {
+  useEffect(() => {
+    if (document.getElementById("razorpay-script")) return;
 
-      const loaded = await loadScript();
-      if (!loaded) {
-        toast({
-          title: 'Error',
-          description: 'Failed to load Razorpay',
-          variant: 'destructive',
-        });
-        return;
-      }
+    const script = document.createElement("script");
+    script.id = "razorpay-script";
+    script.src = "https://checkout.razorpay.com/v1/checkout.js";
+    script.async = true;
+    document.body.appendChild(script);
+  }, []);
 
-      const rzp = new window.Razorpay({
-        key: keyId,
-        amount: amount * 100,
-        currency: 'INR',
-        name: 'Sambhav',
-        description: eventTitle,
-        handler: async (response: PaymentResult) => {
-          try {
-            const res = await fetch(
-              'http://localhost:5000/api/verify-payment',
-              {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                  razorpay_payment_id: response.razorpay_payment_id,
-                  eventTitle,
-                  name: user.name,
-                  email: user.email,
-                }),
-              }
-            );
+  const payForEvent = (
+    title: string,
+    amount: number,
+    user: UserDetails,
+    onSuccess: SuccessCallback
+  ) => {
+    if (!window.Razorpay) {
+      alert("Razorpay SDK failed to load");
+      return;
+    }
 
-            const data = await res.json();
+    const options = {
+      key,
+      amount: amount * 100,
+      currency: "INR",
+      name: "Sambhav",
+      description: title,
+      prefill: {
+        name: user.name,
+        email: user.email,
+      },
+      handler: async (response: any) => {
+        await onSuccess(response);
+      },
+      theme: {
+        color: "#7c3aed",
+      },
+    };
 
-            if (!data.success) {
-              throw new Error(data.message);
-            }
-
-            toast({
-              title: 'Payment Successful',
-              description: 'Ticket email sent successfully',
-            });
-
-            onSuccess();
-          } catch (err) {
-            toast({
-              title: 'Email Error',
-              description: 'Payment done, but email failed',
-              variant: 'destructive',
-            });
-          }
-        },
-        prefill: {
-          name: user.name,
-          email: user.email,
-        },
-        theme: {
-          color: '#17a8db',
-        },
-      });
-
-      rzp.open();
-    },
-    [keyId]
-  );
+    const razorpay = new window.Razorpay(options);
+    razorpay.open();
+  };
 
   return { payForEvent };
 };

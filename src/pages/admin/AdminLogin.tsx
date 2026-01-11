@@ -10,13 +10,12 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
-
 import { Eye, EyeOff, Lock, Mail } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
+const API_URL = import.meta.env.VITE_API_URL;
 
 export const AdminLogin: React.FC = () => {
-  
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -26,73 +25,60 @@ export const AdminLogin: React.FC = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
-
-
   const handleSubmit = async (e: React.FormEvent) => {
-  e.preventDefault();
-  setIsLoading(true);
+    e.preventDefault();
+    setIsLoading(true);
 
-  try {
-    const response = await fetch('http://localhost:5000/api/login', {
-      method: 'POST',
-      credentials: 'include', // ⭐ CRITICAL
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        username: email,
-        password: password,
-      }),
-    });
-
-    const data = await response.json();
-
-    if (response.ok && data.success) {
-      localStorage.setItem('adminLoggedIn', 'true');
-      localStorage.setItem('loginType', loginType);
-
-      toast({
-        title: 'Login Successful',
-        description:
-          loginType === 'admin'
-            ? 'Welcome to the admin panel.'
-            : 'Scanner mode activated.',
+    try {
+      const response = await fetch(`${API_URL}/api/login`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        credentials: 'include',
+        body: JSON.stringify({
+          username: email,
+          password: password,
+        }),
       });
-if (loginType === "admin") {
-  window.location.href = "/admin";
-} else {
-  window.location.href = "/scan";
-}
 
+      const data = await response.json();
 
-    } else {
+      if (response.ok && data.success) {
+        localStorage.setItem('adminLoggedIn', 'true');
+        localStorage.setItem('loginType', loginType);
+
+        toast({
+          title: 'Login Successful',
+          description:
+            loginType === 'admin'
+              ? 'Welcome to the admin panel.'
+              : 'Scanner mode activated.',
+        });
+
+        navigate(loginType === 'admin' ? '/admin' : '/scan');
+      } else {
+        toast({
+          title: 'Login Failed',
+          description: data.message || 'Invalid credentials.',
+          variant: 'destructive',
+        });
+      }
+    } catch (error) {
       toast({
-        title: 'Login Failed',
-        description: 'Invalid credentials.',
+        title: 'Server Error',
+        description: 'Unable to connect to server.',
         variant: 'destructive',
       });
+      console.error(error);
+    } finally {
+      setIsLoading(false);
     }
-  } catch (error) {
-    toast({
-      title: 'Server Error',
-      description: 'Backend not reachable on port 5000.',
-      variant: 'destructive',
-    });
-  } finally {
-    setIsLoading(false);
-  }
-};
-
+  };
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 flex items-center justify-center p-4">
-      {/* Background Glow Effects */}
-      <div className="absolute inset-0 overflow-hidden">
-        <div className="absolute top-1/4 left-1/4 w-96 h-96 bg-primary/10 rounded-full blur-3xl" />
-        <div className="absolute bottom-1/4 right-1/4 w-96 h-96 bg-accent/10 rounded-full blur-3xl" />
-      </div>
-
-      <Card className="w-full max-w-md relative z-10 border-border/50 bg-card/80 backdrop-blur-sm">
+      <Card className="w-full max-w-md border-border/50 bg-card/80 backdrop-blur-sm">
         <CardHeader className="text-center space-y-3">
           <div className="mx-auto w-16 h-16 bg-primary/10 rounded-2xl flex items-center justify-center">
             <Lock className="w-8 h-8 text-primary" />
@@ -102,7 +88,6 @@ if (loginType === "admin") {
         </CardHeader>
 
         <CardContent>
-          {/* LOGIN MODE SELECTION */}
           <div className="mb-6 space-y-3">
             <Label>Login Mode</Label>
             <div className="flex gap-6">
@@ -128,18 +113,15 @@ if (loginType === "admin") {
             </div>
           </div>
 
-          {/* LOGIN FORM */}
           <form onSubmit={handleSubmit} className="space-y-4">
             <div>
               <Label>Username / Email</Label>
               <div className="relative">
                 <Mail className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
                 <Input
-                  type="text"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="pl-10"
-                  placeholder="Enter your username"
                   required
                 />
               </div>
@@ -167,19 +149,9 @@ if (loginType === "admin") {
             </div>
 
             <Button className="w-full" disabled={isLoading}>
-              {isLoading
-                ? 'Signing in...'
-                : loginType === 'admin'
-                ? 'Login to Admin Panel'
-                : 'Login for Scanning'}
+              {isLoading ? 'Signing in...' : 'Login'}
             </Button>
           </form>
-
-          <div className="mt-6 text-center">
-            <a href="/" className="text-sm text-muted-foreground hover:text-primary">
-              ← Back to Website
-            </a>
-          </div>
         </CardContent>
       </Card>
     </div>

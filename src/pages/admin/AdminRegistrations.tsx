@@ -19,6 +19,8 @@ interface Registration {
   createdAt?: string;
 }
 
+const API_URL = import.meta.env.VITE_API_URL;
+
 const AdminRegistrations: React.FC = () => {
   const [registrations, setRegistrations] = useState<Registration[]>([]);
   const [loading, setLoading] = useState(true);
@@ -32,7 +34,7 @@ const AdminRegistrations: React.FC = () => {
 
   const fetchRegistrations = async () => {
     try {
-      const res = await fetch("http://localhost:5000/api/registrations", {
+      const res = await fetch(`${API_URL}/api/registrations`, {
         credentials: "include",
       });
 
@@ -64,7 +66,7 @@ const AdminRegistrations: React.FC = () => {
     return registrations.filter((r) => r.event === selectedEvent);
   }, [registrations, selectedEvent]);
 
-  /* 🔹 EXPORT CSV (EVENT-AWARE) */
+  /* 🔹 EXPORT CSV */
   const exportCSV = () => {
     if (!filteredRegistrations.length) return;
 
@@ -119,13 +121,11 @@ const AdminRegistrations: React.FC = () => {
 
   return (
     <div className="space-y-6">
-      {/* HEADER */}
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold">Event Registrations</h1>
         <Button onClick={exportCSV}>Export CSV</Button>
       </div>
 
-      {/* EVENT FILTER TABS */}
       <div className="flex flex-wrap gap-2">
         <Button
           size="sm"
@@ -147,7 +147,6 @@ const AdminRegistrations: React.FC = () => {
         ))}
       </div>
 
-      {/* TABLE */}
       <Card>
         <CardHeader>
           <CardTitle>

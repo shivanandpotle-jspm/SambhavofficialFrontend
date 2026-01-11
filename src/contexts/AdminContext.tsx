@@ -10,7 +10,6 @@ import React, {
 
 export interface Event {
   id: string;
-  _id?: string; // MongoDB often uses _id
   title: string;
   date: string;
   time: string;
@@ -35,6 +34,8 @@ export interface EventAttendee {
   registeredAt: string;
 }
 
+/* ================= TEAM ================= */
+
 export interface TeamMember {
   id: string;
   name: string;
@@ -48,6 +49,8 @@ export interface TeamMember {
   };
 }
 
+/* ================= GALLERY ================= */
+
 export interface GalleryImage {
   id: string;
   url: string;
@@ -55,13 +58,15 @@ export interface GalleryImage {
   category: "events" | "workshops" | "community" | "team";
 }
 
+/* ================= SETTINGS ================= */
+
 export interface Settings {
   membershipFee: number;
   defaultEventTicketPrice: number;
   razorpayKeyId: string;
 }
 
-/* ================= CONTEXT TYPE ================= */
+/* ================= CONTEXT ================= */
 
 interface AdminContextType {
   events: Event[];
@@ -84,6 +89,12 @@ const defaultSettings: Settings = {
   razorpayKeyId: "",
 };
 
+// ✅ ADD THESE (fixes TypeScript + Render build)
+const defaultTeamMembers: TeamMember[] = [];
+const defaultGalleryImages: GalleryImage[] = [];
+
+/* ================= CONTEXT ================= */
+
 const AdminContext = createContext<AdminContextType | undefined>(undefined);
 
 /* ================= PROVIDER ================= */
@@ -91,88 +102,42 @@ const AdminContext = createContext<AdminContextType | undefined>(undefined);
 export const AdminProvider = ({ children }: { children: ReactNode }) => {
   const [events, setEvents] = useState<Event[]>([]);
   const [attendees] = useState<EventAttendee[]>([]);
-  const [teamMembers] = useState<TeamMember[]>([]);
-  const [galleryImages] = useState<GalleryImage[]>([]);
+  const [teamMembers] = useState<TeamMember[]>(defaultTeamMembers);
+  const [galleryImages] = useState<GalleryImage[]>(defaultGalleryImages);
   const [settings, setSettings] = useState<Settings>(defaultSettings);
 
-  /* ✅ FETCH EVENTS ON LOAD */
+  const API_URL = import.meta.env.VITE_API_URL;
+
   useEffect(() => {
-    const loadEvents = async () => {
-      try {
-        const res = await fetch("http://localhost:5000/api/events", {
-          credentials: "include",
-        });
-        if (!res.ok) throw new Error("Unauthorized or server error");
-        const data = await res.json();
-        
-        // Ensure this matches the key returned by your backend (e.g., res.json({ success: true, events: ... }))
-        setEvents(data?.events || []); 
-      } catch (err) {
-        console.error("Failed to fetch events:", err);
-        setEvents([]);
-      }
-    };
-
-    loadEvents();
-  }, []);
-
-  /* ================= CRUD ================= */
+    fetch(`${API_URL}/api/events`)
+      .then((res) => res.json())
+      .then((data) => setEvents(data?.events ?? []))
+      .catch(() => setEvents([]));
+  }, [API_URL]);
 
   const addEvent = async (event: Event) => {
-    try {
-      const res = await fetch("http://localhost:5000/api/events", {
-        method: "POST",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(event),
-      });
-      const data = await res.json();
-      
-      if (data.success) {
-        // Add the new event returned from the server to local state to update UI immediately
-        setEvents((prev) => [...prev, data.event]);
-      }
-    } catch (err) {
-      console.error("Error adding event:", err);
-    }
+    await fetch(`${API_URL}/api/events`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(event),
+      credentials: "include",
+    });
   };
 
   const updateEvent = async (id: string, update: Partial<Event>) => {
-    try {
-      const res = await fetch(`http://localhost:5000/api/events/${id}`, {
-        method: "PUT",
-        credentials: "include",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(update),
-      });
-      const data = await res.json();
-      
-      if (data.success) {
-        // Update the local state for the specific event
-        setEvents((prev) =>
-          prev.map((e) => (e.id === id ? { ...e, ...update } : e))
-        );
-      }
-    } catch (err) {
-      console.error("Error updating event:", err);
-    }
+    await fetch(`${API_URL}/api/events/${id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(update),
+      credentials: "include",
+    });
   };
 
   const deleteEvent = async (id: string) => {
-    try {
-      const res = await fetch(`http://localhost:5000/api/events/${id}`, {
-        method: "DELETE",
-        credentials: "include",
-      });
-      const data = await res.json();
-      
-      if (data.success) {
-        // Remove the event from local state to update UI
-        setEvents((prev) => prev.filter((e) => e.id !== id));
-      }
-    } catch (err) {
-      console.error("Error deleting event:", err);
-    }
+    await fetch(`${API_URL}/api/events/${id}`, {
+      method: "DELETE",
+      credentials: "include",
+    });
   };
 
   const updateSettings = (newSettings: Partial<Settings>) => {

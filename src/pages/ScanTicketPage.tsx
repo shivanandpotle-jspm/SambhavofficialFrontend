@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { toast } from "@/hooks/use-toast";
 
 const SCAN_DELAY = 4000;
+const API_URL = import.meta.env.VITE_API_URL;
 
 const ScanTicketPage: React.FC = () => {
   const scannerRef = useRef<Html5Qrcode | null>(null);
@@ -12,7 +13,7 @@ const ScanTicketPage: React.FC = () => {
 
   const [isScanning, setIsScanning] = useState(false);
   const [day, setDay] = useState<"1" | "2">("1");
-  const [scannerKey, setScannerKey] = useState(0); // 🔑 forces DOM reset
+  const [scannerKey, setScannerKey] = useState(0); // forces DOM reset
 
   useEffect(() => {
     return () => {
@@ -35,8 +36,6 @@ const ScanTicketPage: React.FC = () => {
 
     isPausedRef.current = false;
     setIsScanning(false);
-
-    // 🔥 Force re-mount of qr-reader div
     setScannerKey((k) => k + 1);
   };
 
@@ -106,8 +105,11 @@ const ScanTicketPage: React.FC = () => {
   const verifyTicket = async (ticketId: string) => {
     try {
       const res = await fetch(
-        `http://localhost:5000/api/validate-ticket/${ticketId}?day=${day}`,
-        { method: "POST" }
+        `${API_URL}/api/validate-ticket/${ticketId}?day=${day}`,
+        {
+          method: "POST",
+          credentials: "include",
+        }
       );
 
       const result = await res.json();
@@ -143,7 +145,6 @@ const ScanTicketPage: React.FC = () => {
         </CardHeader>
 
         <CardContent className="space-y-4">
-          {/* Day selector */}
           <div className="flex gap-4 justify-center">
             <label className="flex items-center gap-2">
               <input
@@ -163,7 +164,6 @@ const ScanTicketPage: React.FC = () => {
             </label>
           </div>
 
-          {/* Scanner */}
           <div
             key={scannerKey}
             id="qr-reader"
