@@ -145,7 +145,7 @@ export const AboutPage: React.FC = () => {
             variants={fadeUp}
           >
             <h1 className="font-heading text-4xl sm:text-5xl font-bold mb-10">
-              About <span className="text-gradient">Sambhav</span> Foundation
+              About <span className="text-gradient">Sambhav Impact </span>Foundation
             </h1>
 
             {/* 🔽 ONLY CHANGE: INFO WRAPPED IN CONTAINER */}

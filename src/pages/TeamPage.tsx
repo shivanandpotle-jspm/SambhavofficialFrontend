@@ -4,10 +4,187 @@ import { motion, Variants } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Linkedin, Twitter, Instagram, Users } from "lucide-react";
-import { useAdmin } from "@/contexts/AdminContext";
 
 /* =====================
-   Animations
+   REAL TEAM DATA
+===================== */
+
+const realTeamMembers = [
+  /* ===== LEADERSHIP (1 Member) ===== */
+  {
+    id: "1",
+    name: "Vikram Khade",
+    role: "Founder & President",
+    bio: "Visionary leader with 10+ years in social entrepreneurship.",
+    image: "/public/assets/team/vikram-khade.jpg",
+    category: "leadership",
+    socialLinks: {
+      linkedin: "https://linkedin.com/in/vikramkhade",
+    },
+  },
+  
+  /* ===== CORE TEAM ===== */
+  {
+    id: "2",
+    name: "Pranav More",
+    role: "Current President",
+    bio: "Manages day-to-day operations and ensures smooth functioning.",
+    image: "/public/assets/team/pranav-more.jpg",
+    category: "core",
+    socialLinks: {
+      linkedin: "https://linkedin.com/in/pranavmore",
+    },
+  },
+  {
+    id: "3",
+    name: "Tejas Ghondge",
+    role: "Vice President ",
+    bio: "Oversees educational programs and workshop delivery.",
+    image: "/public/assets/team/tejas-ghondge.jpg",
+    category: "core",
+    socialLinks: {
+      linkedin: "https://linkedin.com/in/tejasghondge",
+    },
+  },
+  {
+    id: "4",
+    name: "Sanika Avhad",
+    role: "Secretary",
+    bio: "Drives brand awareness and digital marketing campaigns.",
+    image: "/public/assets/team/sanika-avhad.jpg",
+    category: "core",
+    socialLinks: {
+      linkedin: "https://linkedin.com/in/sanikaavhad",
+    },
+  },
+  {
+    id: "5",
+    name: "Siddharth Gawali",
+    role: "Treasurer",
+    bio: "Handles budgeting and financial reporting.",
+    image: "/public/assets/team/siddharth-gawali.jpg",
+    category: "core",
+    socialLinks: {
+      linkedin: "https://linkedin.com/in/siddharthgawali",
+    },
+  },
+  {
+    id: "6",
+    name: "OM Sonawane",
+    role: "Core Team Member",
+    bio: "Plans and executes community events and fundraisers.",
+    image: "/public/assets/team/om-sonawane.jpg",
+    category: "core",
+    socialLinks: {
+      linkedin: "https://linkedin.com/in/omsonawane",
+    },
+  },
+  
+  /* ===== BOARD OF DIRECTORS ===== */
+  {
+    id: "7",
+    name: "Smita Swami",
+    role: "PR Head",
+    bio: "Education specialist focusing on youth development.",
+    image: "/public/assets/team/smita-swami.jpg",
+    category: "bod",
+    socialLinks: {
+      linkedin: "https://linkedin.com/in/smitaswami",
+    },
+  },
+  {
+    id: "8",
+    name: "Devashri Gaud",
+    role: "Board Member",
+    bio: "Strategic advisor with expertise in organizational development.",
+    image: "/public/assets/team/devashri-gaud.jpg",
+    category: "bod",
+    socialLinks: {
+      linkedin: "https://linkedin.com/in/devashrigaud",
+    },
+  },
+  {
+    id: "9",
+    name: "Shreyash Giramkar",
+    role: "CSD ",
+    bio: "Finance expert with background in non-profit management.",
+    image: "/public/assets/team/shreyash-giramkar.jpg",
+    category: "bod",
+    socialLinks: {
+      linkedin: "https://linkedin.com/in/shreyashgiramkar",
+    },
+  },
+  {
+    id: "10",
+    name: "Shreyash Mangle",
+    role: "Documentation Head",
+    bio: "Community relations specialist with extensive network.",
+    image: "/public/assets/team/shreyash-mangle.jpg",
+    category: "bod",
+    socialLinks: {
+      linkedin: "https://linkedin.com/in/shreyashmangle",
+    },
+  },
+
+  {
+    id: "11",
+    name: "Sarthak D",
+    role: "Event Management Head",
+    bio: "Community relations specialist with extensive network.",
+    image: "/public/assets/team/sarthak-d.jpg",
+    category: "bod",
+    socialLinks: {
+      linkedin: "https://linkedin.com/in/sarthakd",
+    },
+  },
+  {
+    id: "12",
+    name: "Vidya Ghodke",
+    role: "Membership Director",
+    bio: "Community relations specialist with extensive network.",
+    image: "/public/assets/team/vidya-ghodke.jpg",
+    category: "bod",
+    socialLinks: {
+      linkedin: "https://linkedin.com/in/vidyaghodke",
+    },
+  },
+    {
+    id: "13",
+    name: "Smit Nukte",
+    role: "Social Media Head",
+    bio: "Community relations specialist with extensive network.",
+    image: "/public/assets/team/smit-nukte.jpg",
+    category: "bod",
+    socialLinks: {
+      linkedin: "https://linkedin.com/in/smitnukte",
+    },
+  },
+    {
+    id: "14",
+    name: "shivanand Potle",
+    role: "Technical  Head",
+    bio: "Community relations specialist with extensive network.",
+    image: "/public/assets/team/shivanand-potle.jpg",
+    category: "bod",
+    socialLinks: {
+      linkedin: "https://linkedin.com/in/shivanandpotle",
+    },
+  },
+    {
+    id: "15",
+    name: "Adityaraj Kshetre",
+    role: "jounior CSD",
+    bio: "Community relations specialist with extensive network.",
+    image: "/public/assets/team/adityaraj-kshetre.jpg",
+    category: "bod",
+    socialLinks: {
+      linkedin: "https://linkedin.com/in/adityarajkshetre",
+    },
+  },
+];
+
+/* =====================
+   Animations - FIXED VARIANTS
 ===================== */
 
 const container: Variants = {
@@ -29,7 +206,9 @@ const fadeUp: Variants = {
   },
 };
 
-const cardHover = {
+// FIXED: Define cardHover as Variants type
+const cardHover: Variants = {
+  initial: { y: 0, scale: 1 },
   hover: {
     y: -10,
     scale: 1.04,
@@ -42,53 +221,30 @@ const cardHover = {
 ===================== */
 
 export const TeamPage: React.FC = () => {
-  const { teamMembers } = useAdmin();
+  const teamMembers = realTeamMembers;
 
-  const getRoleCategory = (
-    role: string
-  ): "leadership" | "core" | "volunteer" => {
-    const lower = role.toLowerCase();
-    if (
-      lower.includes("founder") ||
-      lower.includes("director") ||
-      lower.includes("head")
-    )
-      return "leadership";
-    if (
-      lower.includes("lead") ||
-      lower.includes("manager") ||
-      lower.includes("coordinator")
-    )
-      return "core";
-    return "volunteer";
-  };
+  // Filter members by category
+  const leadership = teamMembers.filter((m) => m.category === "leadership");
+  const coreTeam = teamMembers.filter((m) => m.category === "core");
+  const bod = teamMembers.filter((m) => m.category === "bod");
 
-  const leadership = teamMembers.filter(
-    (m) => getRoleCategory(m.role) === "leadership"
-  );
-  const coreTeam = teamMembers.filter(
-    (m) => getRoleCategory(m.role) === "core"
-  );
-  const volunteers = teamMembers.filter(
-    (m) => getRoleCategory(m.role) === "volunteer"
-  );
-
+  // Card component - ALL CARDS SAME SIZE
   const TeamMemberCard = ({
     member,
-    featured = false,
   }: {
     member: typeof teamMembers[number];
-    featured?: boolean;
   }) => (
-    <motion.div variants={fadeUp} whileHover="hover">
+    <motion.div
+      variants={fadeUp}
+      initial="initial"
+      whileHover="hover"
+      animate="initial"
+    >
       <motion.div variants={cardHover}>
         <Card className="group overflow-hidden border-0 shadow-card hover:shadow-glow transition-all duration-500 bg-card">
           <CardContent className="p-0">
-            <div
-              className={`${
-                featured ? "aspect-[4/5]" : "aspect-square"
-              } relative overflow-hidden bg-gradient-to-br from-primary/20 to-secondary/20`}
-            >
+            {/* ALL CARDS: aspect-square (same height as width) */}
+            <div className="aspect-square relative overflow-hidden bg-gradient-to-br from-primary/20 to-secondary/20">
               {member.image ? (
                 <img
                   src={member.image}
@@ -103,10 +259,11 @@ export const TeamPage: React.FC = () => {
                 </div>
               )}
 
-              {/* Social Overlay */}
+              {/* Social Overlay - FIXED: Only show if links exist */}
               <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 via-foreground/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4">
                 <div className="flex items-center gap-2">
-                  {member.socialLinks?.linkedin && (
+                  {/* Only show LinkedIn if it exists */}
+                  {member.socialLinks && member.socialLinks.linkedin && (
                     <a
                       href={member.socialLinks.linkedin}
                       target="_blank"
@@ -117,7 +274,8 @@ export const TeamPage: React.FC = () => {
                       </Button>
                     </a>
                   )}
-                  {member.socialLinks?.twitter && (
+                  {/* Only show Twitter if it exists
+                  {member.socialLinks && member.socialLinks.twitter && (
                     <a
                       href={member.socialLinks.twitter}
                       target="_blank"
@@ -127,8 +285,9 @@ export const TeamPage: React.FC = () => {
                         <Twitter className="h-4 w-4" />
                       </Button>
                     </a>
-                  )}
-                  {member.socialLinks?.instagram && (
+                  )} */}
+                  {/* Only show Instagram if it exists */}
+                  {/* {member.socialLinks && member.socialLinks.instagram && (
                     <a
                       href={member.socialLinks.instagram}
                       target="_blank"
@@ -138,11 +297,12 @@ export const TeamPage: React.FC = () => {
                         <Instagram className="h-4 w-4" />
                       </Button>
                     </a>
-                  )}
+                  )} */}
                 </div>
               </div>
             </div>
 
+            {/* Card content - ALL SAME */}
             <div className="p-5 text-center">
               <h3 className="font-heading text-lg font-semibold mb-1">
                 {member.name}
@@ -150,7 +310,8 @@ export const TeamPage: React.FC = () => {
               <p className="text-primary text-sm font-medium mb-2">
                 {member.role}
               </p>
-              {featured && member.bio && (
+              {/* Bio shown for ALL cards */}
+              {member.bio && (
                 <p className="text-muted-foreground text-sm line-clamp-2">
                   {member.bio}
                 </p>
@@ -193,7 +354,7 @@ export const TeamPage: React.FC = () => {
         </div>
       )}
 
-      {/* LEADERSHIP */}
+      {/* LEADERSHIP (1 Member) */}
       {leadership.length > 0 && (
         <section className="py-16 bg-background">
           <div className="container mx-auto px-4">
@@ -202,24 +363,14 @@ export const TeamPage: React.FC = () => {
             </h2>
 
             <motion.div
-              className={`grid ${
-                leadership.length === 1
-                  ? "max-w-sm mx-auto"
-                  : leadership.length === 2
-                  ? "max-w-2xl mx-auto grid-cols-2"
-                  : "grid-cols-1 sm:grid-cols-2 lg:grid-cols-3"
-              } gap-8`}
+              className="max-w-sm mx-auto"
               variants={container}
               initial="hidden"
               whileInView="show"
               viewport={{ once: true }}
             >
               {leadership.map((member) => (
-                <TeamMemberCard
-                  key={member.id}
-                  member={member}
-                  featured
-                />
+                <TeamMemberCard key={member.id} member={member} />
               ))}
             </motion.div>
           </div>
@@ -249,47 +400,23 @@ export const TeamPage: React.FC = () => {
         </section>
       )}
 
-      {/* VOLUNTEERS */}
-      {volunteers.length > 0 && (
+      {/* BOARD OF DIRECTORS */}
+      {bod.length > 0 && (
         <section className="py-16 bg-background">
           <div className="container mx-auto px-4">
             <h2 className="text-center text-3xl font-heading font-bold mb-12">
-              Volunteers
+              Board of Directors
             </h2>
 
             <motion.div
-              className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4"
+              className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
               variants={container}
               initial="hidden"
               whileInView="show"
               viewport={{ once: true }}
             >
-              {volunteers.map((member) => (
-                <motion.div key={member.id} variants={fadeUp}>
-                  <Card className="overflow-hidden border-0 shadow-soft">
-                    <CardContent className="p-0">
-                      <div className="aspect-square bg-muted flex items-center justify-center">
-                        {member.image ? (
-                          <img
-                            src={member.image}
-                            alt={member.name}
-                            className="w-full h-full object-cover"
-                          />
-                        ) : (
-                          <Users className="h-8 w-8 text-muted-foreground/30" />
-                        )}
-                      </div>
-                      <div className="p-3 text-center">
-                        <h3 className="text-sm font-medium truncate">
-                          {member.name}
-                        </h3>
-                        <p className="text-xs text-muted-foreground truncate">
-                          {member.role}
-                        </p>
-                      </div>
-                    </CardContent>
-                  </Card>
-                </motion.div>
+              {bod.map((member) => (
+                <TeamMemberCard key={member.id} member={member} />
               ))}
             </motion.div>
           </div>
@@ -314,7 +441,7 @@ export const TeamPage: React.FC = () => {
             </Button>
           </Link>
         </div>
-      </section>
+</section>
     </div>
   );
 };
