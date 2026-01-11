@@ -10,10 +10,13 @@ import {
   CardHeader,
   CardTitle,
 } from '@/components/ui/card';
+
 import { Eye, EyeOff, Lock, Mail } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
+
 export const AdminLogin: React.FC = () => {
+  
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
@@ -23,65 +26,63 @@ export const AdminLogin: React.FC = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
 
+
+
   const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
+  e.preventDefault();
+  setIsLoading(true);
 
-    try {
-      // Connect to your Node.js backend API
-      const response = await fetch('http://localhost:5000/api/login', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        // Backend expects 'username', mapping email state to it
-        body: JSON.stringify({ 
-          username: email, 
-          password: password 
-        }),
-      });
+  try {
+    const response = await fetch('http://localhost:5000/api/login', {
+      method: 'POST',
+      credentials: 'include', // ⭐ CRITICAL
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        username: email,
+        password: password,
+      }),
+    });
 
-      const data = await response.json();
+    const data = await response.json();
 
-      if (response.ok && data.success) {
-        // Store session state locally for frontend protection
-        localStorage.setItem('adminLoggedIn', 'true');
-        localStorage.setItem('loginType', loginType);
+    if (response.ok && data.success) {
+      localStorage.setItem('adminLoggedIn', 'true');
+      localStorage.setItem('loginType', loginType);
 
-        toast({
-          title: 'Login Successful',
-          description:
-            loginType === 'admin'
-              ? 'Welcome to the admin panel.'
-              : 'Scanner mode activated.',
-        });
-
-        // Redirect based on the chosen mode
-        if (loginType === 'admin') {
-          navigate('/admin');
-        } else {
-          navigate('/scan');
-        }
-      } else {
-        // Handle invalid credentials from backend
-        toast({
-          title: 'Login Failed',
-          description: data.message || 'Invalid credentials.',
-          variant: 'destructive',
-        });
-      }
-    } catch (error) {
-      // Handle network or server errors
       toast({
-        title: 'Server Error',
-        description: 'Could not connect to the backend. Ensure it is running on port 5000.',
+        title: 'Login Successful',
+        description:
+          loginType === 'admin'
+            ? 'Welcome to the admin panel.'
+            : 'Scanner mode activated.',
+      });
+if (loginType === "admin") {
+  window.location.href = "/admin";
+} else {
+  window.location.href = "/scan";
+}
+
+
+    } else {
+      toast({
+        title: 'Login Failed',
+        description: 'Invalid credentials.',
         variant: 'destructive',
       });
-      console.error('Login error:', error);
-    } finally {
-      setIsLoading(false);
     }
-  };
+  } catch (error) {
+    toast({
+      title: 'Server Error',
+      description: 'Backend not reachable on port 5000.',
+      variant: 'destructive',
+    });
+  } finally {
+    setIsLoading(false);
+  }
+};
+
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-primary/5 flex items-center justify-center p-4">

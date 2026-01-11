@@ -34,8 +34,6 @@ export interface EventAttendee {
   registeredAt: string;
 }
 
-/* ================= TEAM ================= */
-
 export interface TeamMember {
   id: string;
   name: string;
@@ -49,8 +47,6 @@ export interface TeamMember {
   };
 }
 
-/* ================= GALLERY ================= */
-
 export interface GalleryImage {
   id: string;
   url: string;
@@ -58,15 +54,13 @@ export interface GalleryImage {
   category: "events" | "workshops" | "community" | "team";
 }
 
-/* ================= SETTINGS ================= */
-
 export interface Settings {
   membershipFee: number;
   defaultEventTicketPrice: number;
   razorpayKeyId: string;
 }
 
-/* ================= CONTEXT ================= */
+/* ================= CONTEXT TYPE ================= */
 
 interface AdminContextType {
   events: Event[];
@@ -89,75 +83,6 @@ const defaultSettings: Settings = {
   razorpayKeyId: "",
 };
 
-/* ✅ FULL TEAM DATA (Leadership + Core + Volunteers) */
-const defaultTeamMembers: TeamMember[] = [
-  // Leadership
-  {
-    id: "1",
-    name: "Aarav Kulkarni",
-    role: "Founder & Director",
-    bio: "Leads Sambhav with vision and strategy.",
-    image: "https://i.pravatar.cc/400?img=12",
-    socialLinks: { linkedin: "https://linkedin.com" },
-  },
-
-  // Core Team
-  {
-    id: "2",
-    name: "Sneha Patil",
-    role: "Operations Head",
-    image: "https://i.pravatar.cc/400?img=32",
-    socialLinks: { instagram: "https://instagram.com" },
-  },
-  {
-    id: "3",
-    name: "Rohit Sharma",
-    role: "Community Lead",
-    image: "https://i.pravatar.cc/400?img=5",
-    socialLinks: { twitter: "https://twitter.com" },
-  },
-
-  // Volunteers
-  {
-    id: "4",
-    name: "Ananya Deshmukh",
-    role: "Volunteer Coordinator",
-    image: "https://i.pravatar.cc/400?img=45",
-    socialLinks: {},
-  },
-  {
-    id: "5",
-    name: "Kunal Joshi",
-    role: "Volunteer",
-    image: "https://i.pravatar.cc/400?img=15",
-    socialLinks: {},
-  },
-];
-
-/* ✅ GALLERY DATA */
-const defaultGalleryImages: GalleryImage[] = [
-  {
-    id: "g1",
-    url: "https://images.unsplash.com/photo-1540317580384-e5d43616b9aa?w=800",
-    caption: "Financial Literacy Workshop",
-    category: "workshops",
-  },
-  {
-    id: "g2",
-    url: "https://images.unsplash.com/photo-1523240795612-9a054b0db644?w=800",
-    caption: "Entrepreneur Networking Event",
-    category: "events",
-  },
-  {
-    id: "g3",
-    url: "https://images.unsplash.com/photo-1556761175-5973dc0f32e7?w=800",
-    caption: "Team Building Activity",
-    category: "team",
-  },
-];
-
-/* ================= CONTEXT ================= */
-
 const AdminContext = createContext<AdminContextType | undefined>(undefined);
 
 /* ================= PROVIDER ================= */
@@ -165,20 +90,29 @@ const AdminContext = createContext<AdminContextType | undefined>(undefined);
 export const AdminProvider = ({ children }: { children: ReactNode }) => {
   const [events, setEvents] = useState<Event[]>([]);
   const [attendees] = useState<EventAttendee[]>([]);
-  const [teamMembers] = useState<TeamMember[]>(defaultTeamMembers);
-  const [galleryImages] = useState<GalleryImage[]>(defaultGalleryImages);
+  const [teamMembers] = useState<TeamMember[]>([]);
+  const [galleryImages] = useState<GalleryImage[]>([]);
   const [settings, setSettings] = useState<Settings>(defaultSettings);
 
+  /* ✅ FETCH EVENTS (AUTH SAFE) */
   useEffect(() => {
-    fetch("http://localhost:5000/api/events")
-      .then((res) => res.json())
+    fetch("http://localhost:5000/api/events", {
+      credentials: "include",
+    })
+      .then((res) => {
+        if (!res.ok) throw new Error("Unauthorized");
+        return res.json();
+      })
       .then((data) => setEvents(data?.events ?? []))
       .catch(() => setEvents([]));
   }, []);
 
+  /* ================= CRUD ================= */
+
   const addEvent = async (event: Event) => {
     await fetch("http://localhost:5000/api/events", {
       method: "POST",
+      credentials: "include",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(event),
     });
@@ -187,6 +121,7 @@ export const AdminProvider = ({ children }: { children: ReactNode }) => {
   const updateEvent = async (id: string, update: Partial<Event>) => {
     await fetch(`http://localhost:5000/api/events/${id}`, {
       method: "PUT",
+      credentials: "include",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(update),
     });
@@ -195,6 +130,7 @@ export const AdminProvider = ({ children }: { children: ReactNode }) => {
   const deleteEvent = async (id: string) => {
     await fetch(`http://localhost:5000/api/events/${id}`, {
       method: "DELETE",
+      credentials: "include",
     });
   };
 

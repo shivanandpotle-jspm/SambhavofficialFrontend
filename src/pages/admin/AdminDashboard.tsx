@@ -11,11 +11,11 @@ import { useNavigate } from "react-router-dom";
 import { useAdmin } from "@/contexts/AdminContext";
 
 const AdminDashboard: React.FC = () => {
-  const navigate = useNavigate();
+   const navigate = useNavigate();
   const { events } = useAdmin();
 
   return (
-    <div className="space-y-8">
+   <div className="space-y-8">
       <div className="flex items-center justify-between">
         <h1 className="text-3xl font-bold">Admin Dashboard</h1>
         <Button onClick={() => navigate("/admin/registrations")}>
@@ -65,5 +65,6 @@ const AdminDashboard: React.FC = () => {
     </div>
   );
 };
+
 
 export default AdminDashboard;

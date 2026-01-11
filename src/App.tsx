@@ -34,6 +34,7 @@ import ScanTicketPage from "@/pages/ScanTicketPage";
 
 /* ===== Misc ===== */
 import NotFound from "@/pages/NotFound";
+import ProtectedRoute from "@/components/ProtectedRoute";
 
 const queryClient = new QueryClient();
 
@@ -69,10 +70,17 @@ const App = () => {
               </Route>
 
               {/* ================= AUTH ================= */}
-              <Route path="/admin/login" element={<AdminLogin />} />
+              <Route path="/login" element={<AdminLogin />} />
 
               {/* ================= ADMIN ================= */}
-              <Route path="/admin" element={<AdminLayout />}>
+              <Route
+                path="/admin"
+                element={
+                  <ProtectedRoute>
+                    <AdminLayout />
+                  </ProtectedRoute>
+                }
+              >
                 <Route index element={<AdminDashboard />} />
                 <Route path="events" element={<AdminEvents />} />
                 <Route path="registrations" element={<AdminRegistrations />} />
@@ -80,7 +88,14 @@ const App = () => {
               </Route>
 
               {/* ================= SCANNER ================= */}
-              <Route path="/scan" element={<ScanTicketPage />} />
+              <Route
+                path="/scan"
+                element={
+                  <ProtectedRoute>
+                    <ScanTicketPage />
+                  </ProtectedRoute>
+                }
+              />
 
               {/* ================= 404 ================= */}
               <Route path="*" element={<NotFound />} />
