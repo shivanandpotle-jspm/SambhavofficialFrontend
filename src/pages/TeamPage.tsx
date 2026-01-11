@@ -3,10 +3,10 @@ import { Link } from "react-router-dom";
 import { motion, Variants } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Linkedin, Twitter, Instagram, Users } from "lucide-react";
+import { Linkedin, Users, Sparkles, ScrollText, Wand2 } from "lucide-react";
 
 /* =====================
-   REAL TEAM DATA
+   REAL TEAM DATA (Preserved)
 ===================== */
 
 const realTeamMembers = [
@@ -184,7 +184,7 @@ const realTeamMembers = [
 ];
 
 /* =====================
-   Animations - FIXED VARIANTS
+   Animations (Preserved)
 ===================== */
 
 const container: Variants = {
@@ -206,7 +206,6 @@ const fadeUp: Variants = {
   },
 };
 
-// FIXED: Define cardHover as Variants type
 const cardHover: Variants = {
   initial: { y: 0, scale: 1 },
   hover: {
@@ -223,12 +222,10 @@ const cardHover: Variants = {
 export const TeamPage: React.FC = () => {
   const teamMembers = realTeamMembers;
 
-  // Filter members by category
   const leadership = teamMembers.filter((m) => m.category === "leadership");
   const coreTeam = teamMembers.filter((m) => m.category === "core");
   const bod = teamMembers.filter((m) => m.category === "bod");
 
-  // Card component - ALL CARDS SAME SIZE
   const TeamMemberCard = ({
     member,
   }: {
@@ -241,78 +238,48 @@ export const TeamPage: React.FC = () => {
       animate="initial"
     >
       <motion.div variants={cardHover}>
-        <Card className="group overflow-hidden border-0 shadow-card hover:shadow-glow transition-all duration-500 bg-card">
-          <CardContent className="p-0">
-            {/* ALL CARDS: aspect-square (same height as width) */}
-            <div className="aspect-square relative overflow-hidden bg-gradient-to-br from-primary/20 to-secondary/20">
+        <Card className="group overflow-hidden border-2 border-[#d4af37] shadow-[5px_5px_0px_#3c2a1a] transition-all duration-500 bg-[#fdf5e6] rounded-none relative">
+          {/* Parchment Texture Overlay */}
+          <div className="absolute inset-0 opacity-10 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/old-map.png')]"></div>
+          
+          <CardContent className="p-0 relative z-10">
+            <div className="aspect-square relative overflow-hidden border-b-2 border-[#d4af37] bg-[#1a120b]">
               {member.image ? (
                 <img
                   src={member.image}
                   alt={member.name}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 sepia-[0.2]"
                 />
               ) : (
                 <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="w-24 h-24 rounded-full bg-primary/10 flex items-center justify-center">
-                    <Users className="h-12 w-12 text-primary/50" />
+                  <div className="w-24 h-24 rounded-full border-2 border-[#d4af37]/30 flex items-center justify-center">
+                    <Users className="h-12 w-12 text-[#d4af37]/50" />
                   </div>
                 </div>
               )}
 
-              {/* Social Overlay - FIXED: Only show if links exist */}
-              <div className="absolute inset-0 bg-gradient-to-t from-foreground/80 via-foreground/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4">
+              <div className="absolute inset-0 bg-gradient-to-t from-[#741b1b]/90 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4">
                 <div className="flex items-center gap-2">
-                  {/* Only show LinkedIn if it exists */}
-                  {member.socialLinks && member.socialLinks.linkedin && (
-                    <a
-                      href={member.socialLinks.linkedin}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      <Button variant="glass" size="icon" className="h-9 w-9">
+                  {member.socialLinks?.linkedin && (
+                    <a href={member.socialLinks.linkedin} target="_blank" rel="noreferrer">
+                      <Button className="bg-[#d4af37] hover:bg-[#f3e5ab] text-[#1a120b] h-9 w-9 rounded-none">
                         <Linkedin className="h-4 w-4" />
                       </Button>
                     </a>
                   )}
-                  {/* Only show Twitter if it exists
-                  {member.socialLinks && member.socialLinks.twitter && (
-                    <a
-                      href={member.socialLinks.twitter}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      <Button variant="glass" size="icon" className="h-9 w-9">
-                        <Twitter className="h-4 w-4" />
-                      </Button>
-                    </a>
-                  )} */}
-                  {/* Only show Instagram if it exists */}
-                  {/* {member.socialLinks && member.socialLinks.instagram && (
-                    <a
-                      href={member.socialLinks.instagram}
-                      target="_blank"
-                      rel="noreferrer"
-                    >
-                      <Button variant="glass" size="icon" className="h-9 w-9">
-                        <Instagram className="h-4 w-4" />
-                      </Button>
-                    </a>
-                  )} */}
                 </div>
               </div>
             </div>
 
-            {/* Card content - ALL SAME */}
             <div className="p-5 text-center">
-              <h3 className="font-heading text-lg font-semibold mb-1">
+              <h3 className="font-serif text-xl font-bold mb-1 text-[#2d1e12]">
                 {member.name}
               </h3>
-              <p className="text-primary text-sm font-medium mb-2">
+              <p className="text-[#741b1b] text-xs font-bold uppercase tracking-widest mb-2 font-serif italic">
                 {member.role}
               </p>
-              {/* Bio shown for ALL cards */}
               {member.bio && (
-                <p className="text-muted-foreground text-sm line-clamp-2">
+                <p className="text-[#5d4037] text-sm font-serif italic line-clamp-2 leading-relaxed">
                   {member.bio}
                 </p>
               )}
@@ -324,24 +291,26 @@ export const TeamPage: React.FC = () => {
   );
 
   return (
-    <div className="pt-24 overflow-hidden">
+    <div className="pt-24 min-h-screen bg-[#1a120b] text-[#f3e5ab] selection:bg-[#741b1b] selection:text-white font-serif relative overflow-hidden">
+      {/* Background Magic Texture */}
+      <div className="absolute inset-0 opacity-10 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/old-map.png')]"></div>
+
       {/* HERO */}
-      <section className="py-16 bg-gradient-section relative overflow-hidden">
+      <section className="py-16 relative z-10">
         <motion.div
-          className="container mx-auto px-4 relative z-10"
+          className="container mx-auto px-4 text-center"
           variants={container}
           initial="hidden"
           animate="show"
         >
-          <motion.div
-            className="max-w-3xl mx-auto text-center"
-            variants={fadeUp}
-          >
-            <h1 className="font-heading text-4xl sm:text-5xl font-bold mb-6">
-              Meet Our <span className="text-gradient">Team</span>
+          <motion.div className="max-w-3xl mx-auto" variants={fadeUp}>
+            <h1 className="text-5xl font-bold mb-6 text-[#d4af37] drop-shadow-[2px_2px_0px_#741b1b]" style={{ fontFamily: "'Hogwarts', serif" }}>
+              The Order of <span className="italic">Sambhav</span>
             </h1>
-            <p className="text-lg text-muted-foreground">
-              Passionate individuals dedicated to making a difference.
+            <p className="text-lg italic text-[#f3e5ab]/70 flex items-center justify-center gap-2">
+              <Wand2 className="h-5 w-5 text-[#d4af37]" />
+              Dedicated wizards committed to transforming the realm.
+              <Wand2 className="h-5 w-5 text-[#d4af37]" />
             </p>
           </motion.div>
         </motion.div>
@@ -349,19 +318,18 @@ export const TeamPage: React.FC = () => {
 
       {/* EMPTY STATE */}
       {teamMembers.length === 0 && (
-        <div className="py-16 text-center text-muted-foreground">
-          Team information will be updated soon.
+        <div className="py-16 text-center text-[#d4af37] italic font-serif">
+          The records of the Order are currently being updated by the Ministry.
         </div>
       )}
 
-      {/* LEADERSHIP (1 Member) */}
+      {/* LEADERSHIP */}
       {leadership.length > 0 && (
-        <section className="py-16 bg-background">
+        <section className="py-16 relative z-10">
           <div className="container mx-auto px-4">
-            <h2 className="text-center text-3xl font-heading font-bold mb-12">
-              Leadership
+            <h2 className="text-center text-4xl font-bold mb-12 text-[#d4af37] flex items-center justify-center gap-4" style={{ fontFamily: "'Hogwarts', serif" }}>
+              <Sparkles className="h-6 w-6" /> Leadership <Sparkles className="h-6 w-6" />
             </h2>
-
             <motion.div
               className="max-w-sm mx-auto"
               variants={container}
@@ -379,14 +347,13 @@ export const TeamPage: React.FC = () => {
 
       {/* CORE TEAM */}
       {coreTeam.length > 0 && (
-        <section className="py-16 bg-gradient-section">
+        <section className="py-16 relative z-10 border-y border-[#d4af37]/10 bg-[#2d1e12]/30">
           <div className="container mx-auto px-4">
-            <h2 className="text-center text-3xl font-heading font-bold mb-12">
-              Core Team
+            <h2 className="text-center text-4xl font-bold mb-12 text-[#d4af37]" style={{ fontFamily: "'Hogwarts', serif" }}>
+              The Core Guardians
             </h2>
-
             <motion.div
-              className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+              className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8"
               variants={container}
               initial="hidden"
               whileInView="show"
@@ -402,14 +369,13 @@ export const TeamPage: React.FC = () => {
 
       {/* BOARD OF DIRECTORS */}
       {bod.length > 0 && (
-        <section className="py-16 bg-background">
+        <section className="py-16 relative z-10">
           <div className="container mx-auto px-4">
-            <h2 className="text-center text-3xl font-heading font-bold mb-12">
-              Board of Directors
+            <h2 className="text-center text-4xl font-bold mb-12 text-[#d4af37]" style={{ fontFamily: "'Hogwarts', serif" }}>
+              The Council of Directors
             </h2>
-
             <motion.div
-              className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
+              className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8"
               variants={container}
               initial="hidden"
               whileInView="show"
@@ -424,24 +390,23 @@ export const TeamPage: React.FC = () => {
       )}
 
       {/* CTA */}
-      <section className="py-16 bg-gradient-hero text-primary-foreground">
-        <div className="container mx-auto px-4 text-center">
-          <h2
-            className="font-heading text-2xl sm:text-3xl font-bold mb-4"
-            style={{ color: "#17a8db" }}
-          >
-            Want to Join Our Team?
+      <section className="py-24 relative z-10 bg-[#741b1b] text-[#f3e5ab] overflow-hidden border-t-4 border-[#d4af37]">
+        <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/old-map.png')]"></div>
+        <div className="container mx-auto px-4 text-center relative z-10">
+          <h2 className="text-4xl font-bold mb-6 text-[#d4af37]" style={{ fontFamily: "'Hogwarts', serif" }}>
+            Answer the Call of the Order
           </h2>
-          <p className="text-primary-foreground/80 max-w-xl mx-auto mb-8">
-            We're always looking for passionate individuals who share our vision.
+          <p className="text-[#f3e5ab]/80 max-w-xl mx-auto mb-10 italic text-lg leading-relaxed">
+            We seek brave souls who share our vision to empower and evolve the realm.
           </p>
           <Link to="/membership">
-            <Button variant="warm" size="lg">
-              Become a Member
+            <Button className="bg-[#d4af37] hover:bg-[#f3e5ab] text-[#1a120b] font-bold py-6 px-10 rounded-none shadow-[4px_4px_0px_#3c1010] active:shadow-none transition-all uppercase tracking-[0.2em] font-serif">
+              <ScrollText className="h-5 w-5 mr-3" />
+              Sign the Membership Scroll
             </Button>
           </Link>
         </div>
-</section>
+      </section>
     </div>
   );
 };

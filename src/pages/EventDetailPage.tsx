@@ -13,6 +13,8 @@ import {
   Clock,
   Users,
   ArrowLeft,
+  Sparkles,
+  ScrollText,
 } from "lucide-react";
 import { useAdmin } from "@/contexts/AdminContext";
 import { DynamicFormRenderer } from "@/components/DynamicFormRenderer";
@@ -33,8 +35,9 @@ const EventDetailPage: React.FC = () => {
   /* ================= LOADING GUARD ================= */
   if (events.length === 0) {
     return (
-      <div className="pt-24 min-h-screen flex items-center justify-center text-muted-foreground">
-        Loading event details...
+      <div className="pt-24 min-h-screen flex flex-col items-center justify-center bg-[#1a120b] text-[#d4af37]">
+        <Sparkles className="animate-pulse mb-4 h-12 w-12" />
+        <p className="font-serif italic text-xl">Consulting the Marauder's Map...</p>
       </div>
     );
   }
@@ -44,12 +47,16 @@ const EventDetailPage: React.FC = () => {
   /* ================= INVALID EVENT ================= */
   if (!event) {
     return (
-      <div className="pt-24 min-h-screen flex items-center justify-center">
-        <div className="text-center">
-          <h1 className="text-2xl font-bold mb-4">Event Not Found</h1>
-          <Button onClick={() => navigate("/events")} variant="outline">
+      <div className="pt-24 min-h-screen flex items-center justify-center bg-[#1a120b]">
+        <div className="text-center p-8 border-2 border-[#d4af37] bg-[#2d1e12] rounded-lg shadow-[0_0_20px_rgba(212,175,55,0.3)]">
+          <h1 className="text-3xl font-serif font-bold mb-4 text-[#d4af37]">Vanished into the Forbidden Forest</h1>
+          <Button 
+            onClick={() => navigate("/events")} 
+            variant="outline"
+            className="border-[#d4af37] text-[#d4af37] hover:bg-[#d4af37] hover:text-[#1a120b]"
+          >
             <ArrowLeft className="h-4 w-4 mr-2" />
-            Back to Events
+            Return to the Great Hall
           </Button>
         </div>
       </div>
@@ -59,9 +66,18 @@ const EventDetailPage: React.FC = () => {
   /* ================= SUBMIT HANDLER ================= */
   const handleFormSubmit = (data: Record<string, unknown>) => {
     if (event.ticketPrice > 0) {
+      /**
+       * 🪄 CALCULATION FIX: 
+       * Razorpay Fee: 2%
+       * GST on Fee: 18% of 2% = 0.36%
+       * Total Surcharge: 2.36%
+       * Formula: ticketPrice / (1 - 0.0236) = ticketPrice / 0.9764
+       */
+      const finalAmountWithCharges = Math.ceil(event.ticketPrice / 0.9764);
+
       payForEvent(
         event.title,
-        event.ticketPrice,
+        finalAmountWithCharges,
         {
           name: data.name as string,
           email: data.email as string,
@@ -86,16 +102,16 @@ const EventDetailPage: React.FC = () => {
 
           if (!json.success) {
             toast({
-              title: "Registration failed",
-              description: json.message || "Something went wrong",
+              title: "Spell Failed!",
+              description: json.message || "Something went wrong with the payment charm.",
               variant: "destructive",
             });
             return;
           }
 
           toast({
-            title: "Registration Successful 🎉",
-            description: "Ticket sent to your email.",
+            title: "Mischief Managed! 🎉",
+            description: "Your owl is on its way with the ticket.",
           });
 
           setIsRegistering(false);
@@ -104,108 +120,132 @@ const EventDetailPage: React.FC = () => {
     }
   };
 
-  /* ================= UI ================= */
+  /* ================= UI (Hogwarts Theme) ================= */
   return (
-    <div className="pt-24 pb-16 min-h-screen bg-background">
+    <div className="pt-24 pb-16 min-h-screen bg-[#1a120b] selection:bg-[#741b1b] selection:text-white">
+      <style>{`
+        .hogwarts-form input, 
+        .hogwarts-form textarea, 
+        .hogwarts-form select {
+          color: #2d1e12 !important; 
+          background-color: rgba(255, 255, 255, 0.5) !important;
+          border: 1px solid #d4af37 !important;
+        }
+        .hogwarts-form label {
+          color: #741b1b !important; 
+          font-weight: bold;
+        }
+      `}</style>
+
       <div className="container mx-auto px-4">
         <Button
           onClick={() => navigate("/events")}
           variant="ghost"
-          className="mb-6"
+          className="mb-6 text-[#d4af37] hover:bg-[#2d1e12] hover:text-[#f3e5ab] font-serif"
         >
           <ArrowLeft className="h-4 w-4 mr-2" />
-          Back to Events
+          Back to the Common Room
         </Button>
 
         <div className="grid lg:grid-cols-3 gap-8">
-          {/* LEFT */}
           <div className="lg:col-span-2 space-y-8">
-            <div className="aspect-video rounded-2xl overflow-hidden bg-muted">
+            <div className="aspect-video rounded-2xl overflow-hidden border-4 border-[#3c2a1a] shadow-[0_10px_30px_rgba(0,0,0,0.5)] bg-[#000]">
               {event.image ? (
                 <img
                   src={`/assets/events/${event.image}`}
                   alt={event.title}
-                  className="w-full h-full object-cover"
+                  className="w-full h-full object-cover opacity-90 sepia-[0.2]"
                 />
               ) : (
-                <div className="h-full flex items-center justify-center">
-                  <Calendar className="h-24 w-24 text-muted-foreground" />
+                <div className="h-full flex items-center justify-center bg-[#2d1e12]">
+                  <ScrollText className="h-24 w-24 text-[#d4af37]/30" />
                 </div>
               )}
             </div>
 
-            <div>
-              <h1 className="text-3xl font-bold mb-4">
+            <div className="p-8 bg-[#fdf5e6] border-l-8 border-[#741b1b] rounded-r-lg shadow-inner relative overflow-hidden">
+              <div className="absolute inset-0 opacity-10 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/old-map.png')]"></div>
+              
+              <h1 className="text-4xl font-serif font-bold mb-4 text-[#2d1e12] flex items-center gap-3">
+                <Sparkles className="text-[#d4af37]" />
                 {event.title}
               </h1>
 
-              <div className="flex flex-wrap gap-4 text-muted-foreground mb-6">
+              <div className="flex flex-wrap gap-6 text-[#5d4037] mb-8 font-serif italic border-b border-[#d4af37]/40 pb-4">
                 <div className="flex items-center gap-2">
-                  <Calendar className="h-5 w-5" />
-                  {new Date(event.date).toLocaleDateString()}
+                  <Calendar className="h-5 w-5 text-[#741b1b]" />
+                  {new Date(event.date).toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' })}
                 </div>
                 <div className="flex items-center gap-2">
-                  <Clock className="h-5 w-5" />
+                  <Clock className="h-5 w-5 text-[#741b1b]" />
                   {event.time}
                 </div>
                 <div className="flex items-center gap-2">
-                  <MapPin className="h-5 w-5" />
+                  <MapPin className="h-5 w-5 text-[#741b1b]" />
                   {event.location}
                 </div>
                 <div className="flex items-center gap-2">
-                  <Users className="h-5 w-5" />
-                  Max {event.maxAttendees}
+                  <Users className="h-5 w-5 text-[#741b1b]" />
+                  {event.maxAttendees} Wizards Max
                 </div>
               </div>
 
-              <p className="text-muted-foreground whitespace-pre-wrap">
+              <p className="text-[#3c2a1a] leading-relaxed text-lg font-serif first-letter:text-5xl first-letter:font-bold first-letter:text-[#741b1b] first-letter:mr-3 first-letter:float-left">
                 {event.description}
               </p>
             </div>
           </div>
 
-          {/* RIGHT */}
           <div>
-            <Card className="sticky top-28 shadow-card">
-              <CardHeader>
-                <CardTitle>Register for Event</CardTitle>
+            <Card className="sticky top-28 bg-[#f3e5ab] border-2 border-[#d4af37] shadow-[5px_5px_0px_#741b1b] overflow-hidden">
+              <CardHeader className="bg-[#741b1b] text-[#f3e5ab] border-b-2 border-[#d4af37]">
+                <CardTitle className="font-serif tracking-widest uppercase text-center text-sm">Official Decree</CardTitle>
               </CardHeader>
-              <CardContent>
-                <div className="text-3xl font-bold mb-4 text-primary">
-                  {event.ticketPrice > 0
-                    ? `₹${event.ticketPrice}`
-                    : "Free"}
+              <CardContent className="pt-6">
+                <div className="text-center mb-6">
+                    <p className="text-[#5d4037] font-serif italic text-sm mb-1">Entrance Fee</p>
+                    <div className="text-4xl font-serif font-bold text-[#2d1e12]">
+                    {event.ticketPrice > 0
+                        ? `₹${event.ticketPrice}`
+                        : "Free of Galleons"}
+                    </div>
                 </div>
 
                 {!isRegistering ? (
                   <Button
                     size="lg"
-                    className="w-full"
+                    className="w-full bg-[#741b1b] hover:bg-[#5a1515] text-[#f3e5ab] font-serif text-lg py-6 rounded-none border-b-4 border-[#3c1010] active:border-b-0 transition-all"
                     onClick={() => setIsRegistering(true)}
                   >
-                    Register Now
+                    Enlist Now
                   </Button>
                 ) : (
-                  <>
-                    <DynamicFormRenderer
-                      fields={event.formFields}
-                      onSubmit={handleFormSubmit}
-                      submitLabel={
-                        event.ticketPrice > 0
-                          ? `Pay ₹${event.ticketPrice} & Register`
-                          : "Register"
-                      }
-                    />
+                  <div className="space-y-4">
+                    <div className="p-4 bg-[#fdf5e6] border border-[#d4af37]/30 rounded text-[#3c2a1a] hogwarts-form">
+                        <DynamicFormRenderer
+                        fields={event.formFields}
+                        onSubmit={handleFormSubmit}
+                        submitLabel={
+                            event.ticketPrice > 0
+                            ? `Pay Galleons & Enlist`
+                            : "Submit Scroll"
+                        }
+                        />
+                    </div>
 
                     <Button
                       variant="ghost"
-                      className="w-full mt-3"
+                      className="w-full mt-3 text-[#741b1b] hover:text-[#5a1515] font-serif underline"
                       onClick={() => setIsRegistering(false)}
                     >
-                      Cancel
+                      Withdraw Application
                     </Button>
-                  </>
+                  </div>
                 )}
+                
+                <div className="mt-8 flex justify-center opacity-20">
+                    <img src="/assets/sambhav_logo.png" alt="Seal" className="h-16 grayscale sepia" />
+                </div>
               </CardContent>
             </Card>
           </div>

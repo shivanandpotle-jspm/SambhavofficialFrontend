@@ -10,6 +10,7 @@ import React, {
 
 export interface Event {
   id: string;
+  _id?: string; // MongoDB often uses _id
   title: string;
   date: string;
   time: string;
@@ -94,44 +95,84 @@ export const AdminProvider = ({ children }: { children: ReactNode }) => {
   const [galleryImages] = useState<GalleryImage[]>([]);
   const [settings, setSettings] = useState<Settings>(defaultSettings);
 
-  /* ✅ FETCH EVENTS (AUTH SAFE) */
+  /* ✅ FETCH EVENTS ON LOAD */
   useEffect(() => {
-    fetch("http://localhost:5000/api/events", {
-      credentials: "include",
-    })
-      .then((res) => {
-        if (!res.ok) throw new Error("Unauthorized");
-        return res.json();
-      })
-      .then((data) => setEvents(data?.events ?? []))
-      .catch(() => setEvents([]));
+    const loadEvents = async () => {
+      try {
+        const res = await fetch("http://localhost:5000/api/events", {
+          credentials: "include",
+        });
+        if (!res.ok) throw new Error("Unauthorized or server error");
+        const data = await res.json();
+        
+        // Ensure this matches the key returned by your backend (e.g., res.json({ success: true, events: ... }))
+        setEvents(data?.events || []); 
+      } catch (err) {
+        console.error("Failed to fetch events:", err);
+        setEvents([]);
+      }
+    };
+
+    loadEvents();
   }, []);
 
   /* ================= CRUD ================= */
 
   const addEvent = async (event: Event) => {
-    await fetch("http://localhost:5000/api/events", {
-      method: "POST",
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(event),
-    });
+    try {
+      const res = await fetch("http://localhost:5000/api/events", {
+        method: "POST",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(event),
+      });
+      const data = await res.json();
+      
+      if (data.success) {
+        // Add the new event returned from the server to local state to update UI immediately
+        setEvents((prev) => [...prev, data.event]);
+      }
+    } catch (err) {
+      console.error("Error adding event:", err);
+    }
   };
 
   const updateEvent = async (id: string, update: Partial<Event>) => {
-    await fetch(`http://localhost:5000/api/events/${id}`, {
-      method: "PUT",
-      credentials: "include",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(update),
-    });
+    try {
+      const res = await fetch(`http://localhost:5000/api/events/${id}`, {
+        method: "PUT",
+        credentials: "include",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(update),
+      });
+      const data = await res.json();
+      
+      if (data.success) {
+        // Update the local state for the specific event
+        setEvents((prev) =>
+          prev.map((e) => (e.id === id ? { ...e, ...update } : e))
+        );
+      }
+    } catch (err) {
+      console.error("Error updating event:", err);
+    }
   };
 
   const deleteEvent = async (id: string) => {
-    await fetch(`http://localhost:5000/api/events/${id}`, {
-      method: "DELETE",
-      credentials: "include",
-    });
+    try {
+      const res = await fetch(`http://localhost:5000/api/events/${id}`, {
+        method: "DELETE",
+        credentials: "include",
+      });
+      const data = await res.json();
+      
+      if (data.success) {
+        // Remove the event from local state to update UI
+        setEvents((prev) => prev.filter((e) => e.id !== id));
+      }
+    } catch (err) {
+      console.error("Error deleting event:", err);
+    }
   };
 
   const updateSettings = (newSettings: Partial<Settings>) => {

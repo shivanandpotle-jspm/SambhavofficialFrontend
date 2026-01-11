@@ -15,6 +15,8 @@ import {
   Brain,
   Rocket,
   Quote,
+  ScrollText,
+  Wand2,
 } from "lucide-react";
 
 /* =====================
@@ -29,7 +31,7 @@ const slides = [
   {
     image: slide1,
     link: "/events#financial-literacy",
-    label: "Register for Aarambh ",
+    label: "Register for Aarambh",
   },
   {
     image: slide2,
@@ -41,9 +43,7 @@ const slides = [
     link: "/events#mental-health",
     label: "View Mental Health Event",
   },
-  
 ];
-
 
 /* =====================
    TESTIMONIALS (DYNAMIC)
@@ -124,34 +124,34 @@ const pillars = [
     description:
       "Helping individuals make informed decisions about savings, income, and financial growth.",
     icon: DollarSign,
-    color: "#17a8db",
+    color: "#741b1b",
   },
   {
     title: "Entrepreneurship",
     description:
       "Supporting founders and innovators to build sustainable businesses.",
     icon: Rocket,
-    color: "#e87037",
+    color: "#d4af37",
   },
   {
     title: "Social Service",
     description:
       "Driving meaningful change through community-focused initiatives.",
     icon: HeartHandshake,
-    color: "#ebd37e",
+    color: "#3c2a1a",
   },
   {
     title: "Physical & Mental Well-Being",
     description:
       "Promoting holistic health by nurturing physical fitness and emotional resilience.",
     icon: Brain,
-    color: "#17a8db",
+    color: "#741b1b",
   },
   {
     title: "Innovation",
     description: "Encouraging creative solutions for real-world challenges.",
     icon: Lightbulb,
-    color: "#e87037",
+    color: "#d4af37",
   },
 ];
 
@@ -165,109 +165,126 @@ export const HomePage: React.FC = () => {
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   const startAutoPlay = () => {
-  intervalRef.current && clearInterval(intervalRef.current);
+    intervalRef.current && clearInterval(intervalRef.current);
 
-  intervalRef.current = setInterval(() => {
+    intervalRef.current = setInterval(() => {
+      setCurrentSlide((p) => (p + 1) % slides.length);
+      setCurrentTestimonial((p) => (p + 1) % testimonials.length);
+    }, 5000);
+  };
+
+  useEffect(() => {
+    startAutoPlay();
+    return () => intervalRef.current && clearInterval(intervalRef.current);
+  }, []);
+
+  const nextSlide = () => {
+    if (intervalRef.current) clearInterval(intervalRef.current);
     setCurrentSlide((p) => (p + 1) % slides.length);
-    setCurrentTestimonial((p) => (p + 1) % testimonials.length);
-  }, 5000);
-};
+    startAutoPlay();
+  };
 
-useEffect(() => {
-  startAutoPlay();
-  return () => intervalRef.current && clearInterval(intervalRef.current);
-}, []);
-
-
-const nextSlide = () => {
-  if (intervalRef.current) clearInterval(intervalRef.current);
-  setCurrentSlide((p) => (p + 1) % slides.length);
-  startAutoPlay();
-};
-
-const prevSlide = () => {
-  if (intervalRef.current) clearInterval(intervalRef.current);
-  setCurrentSlide((p) => (p === 0 ? slides.length - 1 : p - 1));
-  startAutoPlay();
-};
-
+  const prevSlide = () => {
+    if (intervalRef.current) clearInterval(intervalRef.current);
+    setCurrentSlide((p) => (p === 0 ? slides.length - 1 : p - 1));
+    startAutoPlay();
+  };
 
   return (
-    <div className="relative overflow-hidden">
+    <div className="relative overflow-hidden bg-[#1a120b] text-[#f3e5ab] selection:bg-[#741b1b] selection:text-white font-serif">
+      {/* Background Parchment Texture */}
+      <div className="absolute inset-0 opacity-10 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/old-map.png')] z-0"></div>
+
       {/* ================= HERO ================= */}
-      <section className="min-h-screen bg-hero-pattern flex items-center">
+      <section className="min-h-screen flex items-center relative z-10">
         <div className="container mx-auto px-4 pt-20 pb-12 text-center">
           <motion.div variants={container} initial="hidden" animate="show">
-            <motion.img
-              src="/src/assets/sambhav_logo.png"
-              alt="Sambhav Logo"
-              variants={fadeUp}
-              className="h-[9.8rem] w-auto object-contain mb-2 ml-[515px]"
-            />
+            <div className="relative inline-block mb-2">
+              <motion.img
+                src="/src/assets/sambhav_logo.png"
+                alt="Sambhav Logo"
+                variants={fadeUp}
+                className="h-[9.8rem] w-auto object-contain drop-shadow-[0_0_15px_rgba(212,175,55,0.5)] sepia-[0.3]"
+              />
+              <motion.div
+                animate={{ opacity: [0.2, 0.5, 0.2] }}
+                transition={{ duration: 3, repeat: Infinity }}
+                className="absolute inset-0 bg-[#d4af37] blur-[50px] -z-10 rounded-full"
+              ></motion.div>
+            </div>
 
             <motion.h1
-              className="text-center font-heading font-bold mb-4 flex justify-center whitespace-nowrap leading-tight"
-
-              style={{ fontSize: "min(2.8vw, 1.1rem)" }}
-
+              className="text-center font-serif font-bold mb-4 flex justify-center whitespace-nowrap leading-tight tracking-[0.2em] text-[#d4af37]"
+              style={{ 
+                fontSize: "min(2.8vw, 1.1rem)",
+                fontFamily: "'Hogwarts', serif" 
+              }}
               variants={fadeUp}
             >
-              <span style={{ color: "#ebd37e" }}>•INITIATE</span>
-              <span className="mx-3" style={{ color: "#17a8db" }}>
-                •CONNECT
+              <span className="flex items-center gap-1">
+                <Sparkles className="h-4 w-4" />
+                INITIATE
               </span>
-              <span style={{ color: "#e87037" }}>•EVOLVE</span>
+              <span className="mx-3 flex items-center gap-1 text-[#f3e5ab]">
+                <Wand2 className="h-4 w-4" />
+                CONNECT
+              </span>
+              <span className="flex items-center gap-1 text-[#741b1b]">
+                <Sparkles className="h-4 w-4" />
+                EVOLVE
+              </span>
             </motion.h1>
-            <div className="w-24 h-1 bg-gradient-to-r from-transparent via-primary to-transparent mx-auto mb-6 opacity-60" />
+            <div className="w-24 h-1 bg-gradient-to-r from-transparent via-[#d4af37] to-transparent mx-auto mb-10 opacity-60" />
 
+            {/* Slider */}
+            <div className="relative w-full max-w-5xl mx-auto h-[26rem] rounded-3xl overflow-hidden shadow-[0_0_40px_rgba(0,0,0,0.8)] border-4 border-[#3c2a1a]">
+              <AnimatePresence mode="wait">
+                <motion.img
+                  key={currentSlide}
+                  src={slides[currentSlide].image}
+                  variants={slideVariant}
+                  initial="enter"
+                  animate="center"
+                  exit="exit"
+                  className="absolute inset-0 w-full h-full object-cover object-center sepia-[0.1]"
+                />
+              </AnimatePresence>
 
-          {/* Slider */}
-           <div className="relative w-full max-w-5xl mx-auto h-[26rem] rounded-3xl overflow-hidden shadow-xl">
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent pointer-events-none"></div>
 
-  <AnimatePresence mode="wait">
-    <motion.img
-      key={currentSlide}
-      src={slides[currentSlide].image}
-      variants={slideVariant}
-      initial="enter"
-      animate="center"
-      exit="exit"
-      className="absolute inset-0 w-full h-full object-cover object-center"
-    />
-  </AnimatePresence>
+              <button
+                onClick={prevSlide}
+                className="absolute left-4 top-1/2 -translate-y-1/2 z-10
+               bg-[#741b1b]/60 hover:bg-[#741b1b] text-[#d4af37]
+               p-3 rounded-full backdrop-blur border border-[#d4af37]/30 transition"
+              >
+                <ChevronLeft className="h-6 w-6" />
+              </button>
 
-  <button
-    onClick={prevSlide}
-    className="absolute left-4 top-1/2 -translate-y-1/2 z-10
-               bg-black/40 hover:bg-black/60 text-white
-               p-3 rounded-full backdrop-blur transition"
-  >
-    <ChevronLeft className="h-6 w-6" />
-  </button>
+              <button
+                onClick={nextSlide}
+                className="absolute right-4 top-1/2 -translate-y-1/2 z-10
+               bg-[#741b1b]/60 hover:bg-[#741b1b] text-[#d4af37]
+               p-3 rounded-full backdrop-blur border border-[#d4af37]/30 transition"
+              >
+                <ChevronRight className="h-6 w-6" />
+              </button>
+            </div>
 
-  <button
-    onClick={nextSlide}
-    className="absolute right-4 top-1/2 -translate-y-1/2 z-10
-               bg-black/40 hover:bg-black/60 text-white
-               p-3 rounded-full backdrop-blur transition"
-  >
-    <ChevronRight className="h-6 w-6" />
-  </button>
-</div>
-
-{/* Event CTA Button */}
-    <div className="mt-6 flex justify-center">
-      <a
-        href={slides[currentSlide].link}
-        className="inline-flex items-center gap-2 px-6 py-3
-                  rounded-full bg-primary text-white font-medium
-                  hover:bg-primary/90 transition"
-      >
-        {slides[currentSlide].label}
-      </a>
-    </div>
-
-
+            {/* Event CTA Button */}
+            <div className="mt-8 flex justify-center">
+              <a
+                href={slides[currentSlide].link}
+                className="inline-flex items-center gap-3 px-10 py-4
+                  rounded-none bg-[#741b1b] text-[#f3e5ab] font-serif font-bold uppercase tracking-widest
+                  border-b-4 border-[#3c1010] shadow-[0_5px_15px_rgba(0,0,0,0.4)]
+                  hover:bg-[#5a1515] hover:-translate-y-1 active:translate-y-0 transition-all"
+                style={{ fontFamily: "'Lumos', serif" }}
+              >
+                <ScrollText className="h-5 w-5" />
+                {slides[currentSlide].label}
+              </a>
+            </div>
 
             {/* Stats */}
             <motion.div
@@ -283,11 +300,14 @@ const prevSlide = () => {
                   <motion.div
                     key={i}
                     variants={fadeUp}
-                    className="rounded-2xl bg-card shadow-card p-6 text-center"
+                    className="rounded-none bg-[#fdf5e6] border-2 border-[#d4af37] p-8 text-center shadow-[5px_5px_0px_#3c2a1a] relative group"
                   >
-                    <Icon className="h-6 w-6 mx-auto mb-3 text-primary" />
-                    <div className="text-3xl font-bold">{s.value}</div>
-                    <div className="text-sm text-muted-foreground">
+                    <div className="absolute inset-0 opacity-5 bg-[url('https://www.transparenttextures.com/patterns/old-map.png')]"></div>
+                    <Icon className="h-8 w-8 mx-auto mb-3 text-[#741b1b] group-hover:scale-110 transition-transform" />
+                    <div className="text-3xl font-serif font-bold text-[#2d1e12]">
+                      {s.value}
+                    </div>
+                    <div className="text-xs uppercase tracking-widest text-[#5d4037] font-bold">
                       {s.label}
                     </div>
                   </motion.div>
@@ -299,13 +319,16 @@ const prevSlide = () => {
       </section>
 
       {/* ================= PILLARS ================= */}
-      <section className="py-24">
+      <section className="py-24 relative z-10">
         <div className="container mx-auto px-4">
-          <h2 className="text-center font-heading text-4xl font-bold mb-16">
-            Five Pillars of <span className="text-gradient">Sambhav</span>
+          <h2 
+            className="text-center font-serif text-5xl font-bold mb-20 text-[#d4af37] drop-shadow-[2px_2px_0px_#741b1b]"
+            style={{ fontFamily: "'Hogwarts', serif" }}
+          >
+            Five Pillars of <span className="italic">Sambhav</span>
           </h2>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-10">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-12">
             {pillars.map((p, i) => {
               const Icon = p.icon;
               return (
@@ -315,18 +338,18 @@ const prevSlide = () => {
                   initial="hidden"
                   whileInView="show"
                   viewport={{ once: true }}
-                  className="text-center"
+                  className="text-center group"
                 >
                   <div
-                    className="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center"
+                    className="w-20 h-20 mx-auto mb-6 rounded-full flex items-center justify-center border-4 border-[#d4af37] shadow-[0_0_20px_rgba(212,175,55,0.3)] group-hover:rotate-[360deg] transition-all duration-1000"
                     style={{ backgroundColor: p.color }}
                   >
-                    <Icon className="h-8 w-8 text-black" />
+                    <Icon className="h-10 w-10 text-[#f3e5ab]" />
                   </div>
-                  <h3 className="font-heading font-semibold mb-2">
+                  <h3 className="font-serif font-bold text-xl mb-3 text-[#f3e5ab]">
                     {p.title}
                   </h3>
-                  <p className="text-sm text-muted-foreground">
+                  <p className="text-sm text-[#f3e5ab]/70 font-serif italic leading-relaxed">
                     {p.description}
                   </p>
                 </motion.div>
@@ -337,10 +360,10 @@ const prevSlide = () => {
       </section>
 
       {/* ================= TESTIMONIALS ================= */}
-      <section className="py-24 bg-gradient-section">
+      <section className="py-24 relative z-10">
         <div className="container mx-auto px-4 text-center">
-          <h2 className="font-heading text-4xl font-bold mb-12">
-            What Our <span className="text-gradient">Guests Say</span>
+          <h2 className="font-serif text-4xl font-bold mb-16 text-[#d4af37]">
+            Whispers from the <span className="italic">Great Hall</span>
           </h2>
 
           <div className="relative max-w-3xl mx-auto">
@@ -351,16 +374,18 @@ const prevSlide = () => {
                 initial="hidden"
                 animate="show"
                 exit="hidden"
-                className="bg-card rounded-3xl shadow-card p-10"
+                className="bg-[#fdf5e6] rounded-none border-l-8 border-[#741b1b] shadow-2xl p-12 relative"
               >
-                <Quote className="h-10 w-10 mx-auto mb-6 text-primary" />
-                <p className="text-lg text-muted-foreground italic mb-6">
+                <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/old-map.png')]"></div>
+                <Quote className="h-12 w-12 mx-auto mb-8 text-[#d4af37]/50" />
+                <p className="text-xl text-[#2d1e12] font-serif italic mb-8 leading-loose">
                   “{testimonials[currentTestimonial].quote}”
                 </p>
-                <div className="font-semibold">
+                <div className="w-12 h-0.5 bg-[#d4af37] mx-auto mb-4"></div>
+                <div className="font-serif font-bold text-[#741b1b] uppercase tracking-widest">
                   {testimonials[currentTestimonial].name}
                 </div>
-                <div className="text-sm text-muted-foreground">
+                <div className="text-xs text-[#5d4037] font-bold mt-1">
                   {testimonials[currentTestimonial].role}
                 </div>
               </motion.div>

@@ -8,6 +8,9 @@ import {
   Twitter,
   Linkedin,
   ArrowUp,
+  Sparkles,
+  ScrollText,
+  Wand2,
 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import sambhavLogo from './../../assets/sambhav_logo.png';
@@ -41,44 +44,35 @@ export const Footer: React.FC = () => {
   ];
 
   return (
-    <footer className="relative bg-primary text-primary-foreground">
-      {/* Wave Top */}
-      <div className="absolute top-0 left-0 right-0 h-16 -translate-y-full overflow-hidden">
-        <svg
-          className="absolute bottom-0 w-full h-16"
-          viewBox="0 0 1440 64"
-          fill="none"
-          preserveAspectRatio="none"
-        >
-          <path
-            d="M0 64H1440V32C1440 32 1320 0 1080 16C840 32 720 48 480 48C240 48 120 16 0 32V64Z"
-            fill="hsl(var(--primary))"
-          />
-        </svg>
-      </div>
+    <footer className="relative bg-[#1a120b] text-[#f3e5ab] font-serif border-t-4 border-[#d4af37]">
+      {/* Background Texture Overlay */}
+      <div className="absolute inset-0 opacity-5 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/old-map.png')]"></div>
 
-      <div className="container mx-auto px-4 pt-16 pb-8">
+      {/* Magical Gradient Top (Replacing Wave) */}
+      <div className="absolute top-0 left-0 right-0 h-16 -translate-y-full bg-gradient-to-t from-[#1a120b] to-transparent"></div>
+
+      <div className="container mx-auto px-4 pt-16 pb-8 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12 mb-12">
-          {/* Brand */}
+          {/* Brand & Mission */}
           <div className="space-y-4">
             <Link to="/" className="flex items-center">
               <img
                 src={sambhavLogo}
                 alt="Sambhav Logo"
-                className="h-12 w-auto object-contain"
+                className="h-14 w-auto object-contain sepia-[0.3] drop-shadow-[0_0_10px_rgba(212,175,55,0.3)]"
               />
             </Link>
 
-            <p className="text-primary-foreground/80 leading-relaxed">
-              Empowering communities through financial literacy,
-              entrepreneurship, and holistic development.
+            <p className="text-[#f3e5ab]/70 leading-relaxed italic">
+              Empowering the realm through financial literacy,
+              entrepreneurship, and the ancient art of holistic development.
             </p>
 
             <div className="flex flex-wrap gap-2 mt-4">
               {motos.map((moto) => (
                 <span
                   key={moto}
-                  className="px-3 py-1 text-xs font-medium rounded-full bg-primary-foreground/10 border border-primary-foreground/20"
+                  className="px-3 py-1 text-[10px] uppercase tracking-widest font-bold rounded-none bg-[#741b1b] text-[#f3e5ab] border border-[#d4af37]/30 shadow-[2px_2px_0px_#3c1010]"
                 >
                   {moto}
                 </span>
@@ -88,16 +82,18 @@ export const Footer: React.FC = () => {
 
           {/* Quick Links */}
           <div>
-            <h4 className="font-heading text-lg font-semibold mb-4">
-              Quick Links
+            <h4 className="font-serif text-xl font-bold mb-6 text-[#d4af37] flex items-center gap-2" style={{ fontFamily: "'Hogwarts', serif" }}>
+              <ScrollText className="h-4 w-4" />
+              Quick Archives
             </h4>
             <ul className="space-y-3">
               {quickLinks.map((link) => (
                 <li key={link.href}>
                   <Link
                     to={link.href}
-                    className="text-primary-foreground/80 hover:text-secondary transition-colors"
+                    className="text-[#f3e5ab]/80 hover:text-[#d4af37] hover:translate-x-1 transition-all flex items-center gap-2 group"
                   >
+                    <span className="opacity-0 group-hover:opacity-100 transition-opacity">✦</span>
                     {link.label}
                   </Link>
                 </li>
@@ -107,7 +103,8 @@ export const Footer: React.FC = () => {
 
           {/* Get Involved */}
           <div>
-            <h4 className="font-heading text-lg font-semibold mb-4">
+            <h4 className="font-serif text-xl font-bold mb-6 text-[#d4af37] flex items-center gap-2" style={{ fontFamily: "'Hogwarts', serif" }}>
+              <Wand2 className="h-4 w-4" />
               Get Involved
             </h4>
             <ul className="space-y-3">
@@ -115,8 +112,9 @@ export const Footer: React.FC = () => {
                 <li key={link.label}>
                   <Link
                     to={link.href}
-                    className="text-primary-foreground/80 hover:text-secondary transition-colors"
+                    className="text-[#f3e5ab]/80 hover:text-[#d4af37] hover:translate-x-1 transition-all flex items-center gap-2 group"
                   >
+                    <span className="opacity-0 group-hover:opacity-100 transition-opacity">✦</span>
                     {link.label}
                   </Link>
                 </li>
@@ -124,34 +122,34 @@ export const Footer: React.FC = () => {
             </ul>
           </div>
 
-          {/* Contact */}
+          {/* Contact & Ministry Information */}
           <div>
-            <h4 className="font-heading text-lg font-semibold mb-4">
-              Contact Us
+            <h4 className="font-serif text-xl font-bold mb-6 text-[#d4af37] flex items-center gap-2" style={{ fontFamily: "'Hogwarts', serif" }}>
+              <Sparkles className="h-4 w-4" />
+              Reach the Council
             </h4>
             <ul className="space-y-4">
               <li className="flex items-start gap-3">
-                <MapPin className="h-5 w-5 mt-0.5 text-secondary" />
-                <span className="text-primary-foreground/80">
-                  JSPM's Rajarshi Shahu College of Engineering, Tathawade
-                  <br />
-                  Pune, Maharashtra 411033
+                <MapPin className="h-5 w-5 mt-0.5 text-[#d4af37]" />
+                <span className="text-[#f3e5ab]/80 italic text-sm">
+                  JSPM's RSCOE, Common Room,<br />
+                  Tathawade, Pune 411033
                 </span>
               </li>
               <li className="flex items-center gap-3">
-                <Phone className="h-5 w-5 text-secondary" />
+                <Phone className="h-5 w-5 text-[#d4af37]" />
                 <a
                   href="tel:+919876543210"
-                  className="text-primary-foreground/80 hover:text-secondary transition-colors"
+                  className="text-[#f3e5ab]/80 hover:text-[#d4af37] transition-colors"
                 >
                   +91 98765 43210
                 </a>
               </li>
               <li className="flex items-center gap-3">
-                <Mail className="h-5 w-5 text-secondary" />
+                <Mail className="h-5 w-5 text-[#d4af37]" />
                 <a
                   href="mailto:sambhav.team.official@gmail.com"
-                  className="text-primary-foreground/80 hover:text-secondary transition-colors"
+                  className="text-[#f3e5ab]/80 hover:text-[#d4af37] transition-colors text-sm"
                 >
                   support@sambhavimpact.org
                 </a>
@@ -159,12 +157,12 @@ export const Footer: React.FC = () => {
             </ul>
 
             {/* Social Links */}
-            <div className="flex items-center gap-3 mt-6">
+            <div className="flex items-center gap-3 mt-8">
               <a
                 href="https://www.instagram.com/sambhav.official"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full bg-primary-foreground/10 flex items-center justify-center hover:bg-secondary hover:text-secondary-foreground transition-all duration-300"
+                className="w-10 h-10 rounded-none bg-[#fdf5e6]/10 border border-[#d4af37]/30 flex items-center justify-center text-[#d4af37] hover:bg-[#741b1b] hover:text-[#f3e5ab] transition-all duration-300"
               >
                 <Instagram className="h-5 w-5" />
               </a>
@@ -173,7 +171,7 @@ export const Footer: React.FC = () => {
                 href="https://x.com/Sambhav_Youth"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full bg-primary-foreground/10 flex items-center justify-center hover:bg-secondary hover:text-secondary-foreground transition-all duration-300"
+                className="w-10 h-10 rounded-none bg-[#fdf5e6]/10 border border-[#d4af37]/30 flex items-center justify-center text-[#d4af37] hover:bg-[#741b1b] hover:text-[#f3e5ab] transition-all duration-300"
               >
                 <Twitter className="h-5 w-5" />
               </a>
@@ -182,7 +180,7 @@ export const Footer: React.FC = () => {
                 href="https://www.linkedin.com/company/sambhav-club"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="w-10 h-10 rounded-full bg-primary-foreground/10 flex items-center justify-center hover:bg-secondary hover:text-secondary-foreground transition-all duration-300"
+                className="w-10 h-10 rounded-none bg-[#fdf5e6]/10 border border-[#d4af37]/30 flex items-center justify-center text-[#d4af37] hover:bg-[#741b1b] hover:text-[#f3e5ab] transition-all duration-300"
               >
                 <Linkedin className="h-5 w-5" />
               </a>
@@ -191,21 +189,21 @@ export const Footer: React.FC = () => {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-primary-foreground/20 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-          <div className="flex flex-col sm:flex-row items-center gap-4 text-sm text-primary-foreground/60">
+        <div className="border-t border-[#d4af37]/20 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex flex-col sm:flex-row items-center gap-4 text-xs text-[#f3e5ab]/50 italic">
             <span>
-              © {new Date().getFullYear()} Sambhav Foundation. All rights reserved.
+              © {new Date().getFullYear()} Order of Sambhav. All rights reserved by the Ministry.
             </span>
             <div className="flex gap-4">
               <Link
                 to="/terms-and-conditions"
-                className="hover:text-secondary transition-colors"
+                className="hover:text-[#d4af37] transition-colors underline decoration-[#d4af37]/20"
               >
                 Terms & Conditions
               </Link>
               <Link
                 to="/privacy-policy"
-                className="hover:text-secondary transition-colors"
+                className="hover:text-[#d4af37] transition-colors underline decoration-[#d4af37]/20"
               >
                 Privacy Policy
               </Link>
@@ -216,7 +214,7 @@ export const Footer: React.FC = () => {
             variant="ghost"
             size="icon"
             onClick={scrollToTop}
-            className="text-primary-foreground hover:text-secondary hover:bg-primary-foreground/10"
+            className="bg-[#741b1b] text-[#f3e5ab] hover:bg-[#d4af37] hover:text-[#1a120b] rounded-none border border-[#d4af37]/30"
           >
             <ArrowUp className="h-5 w-5" />
           </Button>
