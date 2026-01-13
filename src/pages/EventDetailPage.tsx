@@ -15,11 +15,13 @@ import {
   ArrowLeft,
   Sparkles,
   ScrollText,
+  ShieldCheck,
 } from "lucide-react";
 import { useAdmin } from "@/contexts/AdminContext";
 import { DynamicFormRenderer } from "@/components/DynamicFormRenderer";
 import { useRazorpay } from "@/hooks/useRazorpay";
 import { toast } from "@/hooks/use-toast";
+import { Checkbox } from "@/components/ui/checkbox";
 
 const EventDetailPage: React.FC = () => {
   const { eventId } = useParams<{ eventId: string }>();
@@ -31,6 +33,7 @@ const EventDetailPage: React.FC = () => {
   );
 
   const [isRegistering, setIsRegistering] = useState(false);
+  const [userAcceptedTerms, setUserAcceptedTerms] = useState(false);
 
   /* ================= LOADING GUARD ================= */
   if (events.length === 0) {
@@ -65,6 +68,12 @@ const EventDetailPage: React.FC = () => {
 
   /* ================= SUBMIT & VERIFY LOGIC ================= */
   const handleFormSubmit = (data: Record<string, unknown>) => {
+    // Compulsory check for production safety
+    if (!userAcceptedTerms) {
+      toast({ title: "Requirement Unmet", description: "You must accept the terms to register.", variant: "destructive" });
+      return;
+    }
+
     const userEmail = data.email as string;
     const userName = (data.name || "Wizard") as string;
 
@@ -80,7 +89,6 @@ const EventDetailPage: React.FC = () => {
       finalAmount, 
       { name: userName, email: userEmail },
       () => {
-        // Success callback calls our verification helper
         verifyAndSave(data, userName, userEmail);
       }
     );
@@ -111,7 +119,6 @@ const EventDetailPage: React.FC = () => {
     }
   };
 
-  /* ================= RESTORED UI (Hogwarts Theme) ================= */
   return (
     <div className="pt-24 pb-16 min-h-screen bg-[#1a120b] selection:bg-[#741b1b] selection:text-white">
       <style>{`
@@ -213,21 +220,49 @@ const EventDetailPage: React.FC = () => {
                 ) : (
                   <div className="space-y-4">
                     <div className="p-4 bg-[#fdf5e6] border border-[#d4af37]/30 rounded text-[#3c2a1a] hogwarts-form">
-                        <DynamicFormRenderer
-                        fields={event.formFields}
-                        onSubmit={handleFormSubmit}
-                        submitLabel={
-                            event.ticketPrice > 0
-                            ? `Pay Galleons & Enlist`
-                            : "Submit Scroll"
-                        }
-                        />
+                        
+                        {/* Terms & Conditions Enforcement */}
+                        <div className="flex items-center space-x-2 mb-6 p-3 bg-[#741b1b]/5 rounded-lg border border-[#741b1b]/10">
+                          <Checkbox 
+                            id="terms" 
+                            checked={userAcceptedTerms}
+                            onCheckedChange={(checked) => setUserAcceptedTerms(checked as boolean)}
+                            className="border-[#741b1b] data-[state=checked]:bg-[#741b1b]"
+                          />
+                          <label
+                            htmlFor="terms"
+                            className="text-xs font-serif italic leading-none text-[#741b1b] cursor-pointer"
+                          >
+                            I solemnly swear that I accept all terms and conditions.
+                          </label>
+                        </div>
+
+                        {/* Form only renders when terms are accepted to avoid accidental registration */}
+                        {userAcceptedTerms ? (
+                          <DynamicFormRenderer
+                            fields={event.formFields}
+                            onSubmit={handleFormSubmit}
+                            submitLabel={
+                                event.ticketPrice > 0
+                                ? `Pay Galleons & Enlist`
+                                : "Submit Scroll"
+                            }
+                          />
+                        ) : (
+                          <div className="text-center py-4 space-y-2 opacity-60">
+                            <ShieldCheck className="h-10 w-10 mx-auto text-[#741b1b]/40" />
+                            <p className="text-xs font-serif italic">Accept the decree above to reveal the registration scroll.</p>
+                          </div>
+                        )}
                     </div>
 
                     <Button
                       variant="ghost"
                       className="w-full mt-3 text-[#741b1b] hover:text-[#5a1515] font-serif underline"
-                      onClick={() => setIsRegistering(false)}
+                      onClick={() => {
+                        setIsRegistering(false);
+                        setUserAcceptedTerms(false);
+                      }}
                     >
                       Withdraw Application
                     </Button>
@@ -247,4 +282,3 @@ const EventDetailPage: React.FC = () => {
 };
 
 export default EventDetailPage;
-
