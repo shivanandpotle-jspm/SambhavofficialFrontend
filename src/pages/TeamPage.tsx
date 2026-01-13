@@ -6,24 +6,25 @@ import { Button } from "@/components/ui/button";
 import { Linkedin, Users, Sparkles, ScrollText, Wand2 } from "lucide-react";
 
 /* =====================
-   TEAM ASSETS (Correctly Imported for Production)
+   TEAM ASSETS (Corrected Paths for Vite Production)
 ===================== */
-import vikramImg from "@/public/assets/team/vikram-khade.jpg";
-import sanikaImg from "@/public/assets/team/sanika-avhad.jpg";
-import siddharthImg from "@/public/assets/team/siddharth-gawali.jpg";
-import shivanandImg from "@/public/assets/team/shivanand-potle.jpg";
-import pranavImg from "@/public/assets/team/pranav-more.jpg";
+// We use "/assets/..." to point to the public folder correctly
+import vikramImg from "/assets/team/vikram-khade.jpg";
+import sanikaImg from "/assets/team/sanika-avhad.jpg";
+import siddharthImg from "/assets/team/siddharth-gawali.jpg";
+import shivanandImg from "/assets/team/shivanand-potle.jpg";
+import pranavImg from "/assets/team/pranav-more.jpg";
 
-import nitinImg from "@/public/assets/team/nitin-b.png";
-import omImg from "@/public/assets/team/om-sonawane.PNG";
-import ruchitaImg from "@/public/assets/team/ruchita-p.jpg";
-import rushikeshImg from "@/public/assets/team/rushikesh-z.jpg";
-import sarthakImg from "@/public/assets/team/sarthak-d.jpg";
-import shreyashGImg from "@/public/assets/team/shreyas-g.jpg";
-import shreyashMImg from "@/public/assets/team/shreyash-m.jpg";
-import smitaImg from "@/public/assets/team/smita-swami.jpg";
-import tejaswiniImg from "@/public/assets/team/tejaswini-e.jpg";
-import vidyaImg from "@/public/assets/team/vidya-g.jpg";
+import nitinImg from "/assets/team/nitin-b.png";
+import omImg from "/assets/team/om-sonawane.PNG";
+import ruchitaImg from "/assets/team/ruchita-p.jpg";
+import rushikeshImg from "/assets/team/rushikesh-z.jpg";
+import sarthakImg from "/assets/team/sarthak-d.jpg";
+import shreyashGImg from "/assets/team/shreyas-g.jpg";
+import shreyashMImg from "/assets/team/shreyash-m.jpg";
+import smitaImg from "/assets/team/smita-swami.jpg";
+import tejaswiniImg from "/assets/team/tejaswini-e.jpg";
+import vidyaImg from "/assets/team/vidya-g.jpg";
 
 /* =====================
    REAL TEAM DATA
@@ -55,7 +56,7 @@ const realTeamMembers = [
     name: "Tejas Ghondge",
     role: "Vice President",
     bio: "Oversees educational programs and workshop delivery.",
-    image: pranavImg, 
+    image: "", // Updated to fallback if no specific image
     category: "core",
     socialLinks: { linkedin: "https://linkedin.com/in/tejasghondge" },
   },
@@ -86,7 +87,6 @@ const realTeamMembers = [
     category: "core",
     socialLinks: { linkedin: "https://linkedin.com/in/omsonawane" },
   },
- 
 
   /* ===== BOARD OF DIRECTORS ===== */
   {
@@ -98,15 +98,6 @@ const realTeamMembers = [
     category: "bod",
     socialLinks: { linkedin: "https://linkedin.com/in/smitaswami" },
   },
-  // {
-  //   id: "8",
-  //   name: "Devashri Gaud",
-  //   role: "Board Member",
-  //   bio: "Strategic advisor with expertise in organizational development.",
-  //   image: "", 
-  //   category: "bod",
-  //   socialLinks: { linkedin: "https://linkedin.com/in/devashrigaud" },
-  // },
   {
     id: "9",
     name: "Shreyash Giramkar",
@@ -143,15 +134,6 @@ const realTeamMembers = [
     category: "bod",
     socialLinks: { linkedin: "https://linkedin.com/in/vidyaghodke" },
   },
-  // {
-  //   id: "13",
-  //   name: "Smit Nukte",
-  //   role: "SOCIAL MEDIA HEAD",
-  //   bio: "Digital communicator for the Order's message.",
-  //   image: "", 
-  //   category: "bod",
-  //   socialLinks: { linkedin: "https://linkedin.com/in/smitnukte" },
-  // },
   {
     id: "14",
     name: "shivanand Potle",
@@ -188,7 +170,7 @@ const realTeamMembers = [
     category: "bod",
     socialLinks: { linkedin: "#" },
   },
-    {
+  {
     id: "16",
     name: "Nitin B",
     role: "Core Team Member",
@@ -200,7 +182,7 @@ const realTeamMembers = [
 ];
 
 /* =====================
-   Animations & Component Logic (Identical to your provided version)
+   Animations & Component Logic
 ===================== */
 const container: Variants = {
   hidden: {},
@@ -340,4 +322,3 @@ export const TeamPage: React.FC = () => {
     </div>
   );
 };
-
