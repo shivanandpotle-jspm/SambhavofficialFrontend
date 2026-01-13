@@ -26,7 +26,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { DynamicFormBuilder } from "@/components/DynamicFormBuilder";
-import { Plus, Pencil, Sparkles, ScrollText, Wand2 } from "lucide-react";
+import { Plus, Pencil, Sparkles, ScrollText, Wand2, CheckSquare } from "lucide-react";
 import type { Event, FormField } from "@/contexts/AdminContext";
 
 const AdminEvents: React.FC = () => {
@@ -41,12 +41,13 @@ const AdminEvents: React.FC = () => {
   const [description, setDescription] = useState("");
   const [date, setDate] = useState("");
   const [time, setTime] = useState("");
-  const [location, setLocation] = useState("");
+  const [location, setLocation] = useState(""); // Restored
   const [ticketPrice, setTicketPrice] = useState("");
   const [maxAttendees, setMaxAttendees] = useState("");
   const [category, setCategory] = useState<Event["category"]>("financial");
   const [image, setImage] = useState("");
   const [formFields, setFormFields] = useState<FormField[]>([]);
+  const [acceptTerms, setAcceptTerms] = useState(false); // New Checkbox State
 
   const reset = () => {
     setTitle("");
@@ -54,11 +55,12 @@ const AdminEvents: React.FC = () => {
     setDescription("");
     setDate("");
     setTime("");
-    setLocation("");
+    setLocation(""); // Reset
     setTicketPrice("");
     setMaxAttendees("");
     setImage("");
     setCategory("financial");
+    setAcceptTerms(false); // Reset
     setFormFields([
       { id: "name", type: "text", label: "Full Name", required: true },
       { id: "email", type: "email", label: "Email", required: true },
@@ -73,17 +75,25 @@ const AdminEvents: React.FC = () => {
     setDescription(event.description);
     setDate(event.date);
     setTime(event.time);
-    setLocation(event.location);
+    setLocation(event.location); // Load
     setTicketPrice(event.ticketPrice.toString());
     setMaxAttendees(event.maxAttendees.toString());
     setCategory(event.category);
     setImage(event.image || "");
     setFormFields(event.formFields || []);
+    // Note: 'acceptTerms' is usually a fresh requirement for the action, 
+    // but we reset it to false to ensure the admin re-confirms the update.
+    setAcceptTerms(false); 
     setOpen(true);
   };
 
   const submit = async (e: React.FormEvent) => {
     e.preventDefault();
+
+    if (!acceptTerms) {
+        alert("Please accept the terms and conditions before sealing the scroll.");
+        return;
+    }
     
     const data: Event = {
       id: editing?.id || Date.now().toString(),
@@ -92,7 +102,7 @@ const AdminEvents: React.FC = () => {
       description,
       date,
       time,
-      location,
+      location, // Included in data payload
       ticketPrice: Number(ticketPrice),
       maxAttendees: Number(maxAttendees),
       image,
@@ -117,6 +127,7 @@ const AdminEvents: React.FC = () => {
       <style>{`
         .hogwarts-input { background: #2d1e12 !important; border: 1px solid #d4af37 !important; color: #f3e5ab !important; }
         .hogwarts-dialog { background: #1a120b !important; border: 2px solid #d4af37 !important; color: #f3e5ab !important; }
+        .hogwarts-checkbox { accent-color: #741b1b; }
       `}</style>
 
       {/* HEADER */}
@@ -155,6 +166,17 @@ const AdminEvents: React.FC = () => {
                 <div>
                   <Label className="text-[#d4af37]">Full Description</Label>
                   <Textarea className="hogwarts-input" rows={4} value={description} onChange={(e) => setDescription(e.target.value)} required />
+                </div>
+                {/* RESTORED LOCATION FIELD */}
+                <div>
+                  <Label className="text-[#d4af37]">Location</Label>
+                  <Input 
+                    className="hogwarts-input" 
+                    value={location} 
+                    onChange={(e) => setLocation(e.target.value)} 
+                    placeholder="e.g. Great Hall, Hogwarts" 
+                    required 
+                  />
                 </div>
                 <div className="grid grid-cols-2 gap-3">
                   <div>
@@ -204,10 +226,31 @@ const AdminEvents: React.FC = () => {
                     <DynamicFormBuilder fields={formFields} onChange={setFormFields} />
                   </div>
                 </div>
+                {/* NEW TERMS CHECKBOX */}
+                <div className="flex items-center space-x-3 p-2 border border-[#d4af37]/20 rounded bg-[#2d1e12]/30">
+                  <input 
+                    type="checkbox" 
+                    id="terms" 
+                    checked={acceptTerms} 
+                    onChange={(e) => setAcceptTerms(e.target.checked)}
+                    className="hogwarts-checkbox w-5 h-5 cursor-pointer"
+                  />
+                  <Label htmlFor="terms" className="text-[#f3e5ab] text-sm cursor-pointer select-none">
+                    I accept all terms and conditions for this event
+                  </Label>
+                </div>
               </div>
 
               <div className="md:col-span-2 pt-4">
-                <Button type="submit" className="w-full bg-[#741b1b] hover:bg-[#5a1515] text-[#f3e5ab] py-6 text-xl rounded-none border-b-4 border-[#3c1010]">
+                <Button 
+                    type="submit" 
+                    disabled={!acceptTerms}
+                    className={`w-full py-6 text-xl rounded-none border-b-4 border-[#3c1010] transition-all ${
+                        acceptTerms 
+                        ? "bg-[#741b1b] hover:bg-[#5a1515] text-[#f3e5ab]" 
+                        : "bg-gray-700 text-gray-400 cursor-not-allowed border-gray-900"
+                    }`}
+                >
                   {editing ? "Cast Update Charm" : "Seal the Scroll"}
                 </Button>
               </div>
