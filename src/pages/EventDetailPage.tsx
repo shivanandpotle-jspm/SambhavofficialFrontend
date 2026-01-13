@@ -15,7 +15,6 @@ import {
   ArrowLeft,
   Sparkles,
   ScrollText,
-  ShieldCheck,
 } from "lucide-react";
 import { useAdmin } from "@/contexts/AdminContext";
 import { DynamicFormRenderer } from "@/components/DynamicFormRenderer";
@@ -33,7 +32,7 @@ const EventDetailPage: React.FC = () => {
   );
 
   const [isRegistering, setIsRegistering] = useState(false);
-  const [userAcceptedTerms, setUserAcceptedTerms] = useState(false);
+  const [userAcceptedTerms, setUserAcceptedTerms] = useState(false); // Local state for validation
 
   /* ================= LOADING GUARD ================= */
   if (events.length === 0) {
@@ -68,9 +67,13 @@ const EventDetailPage: React.FC = () => {
 
   /* ================= SUBMIT & VERIFY LOGIC ================= */
   const handleFormSubmit = (data: Record<string, unknown>) => {
-    // Compulsory check for production safety
+    // Compulsory check before payment/registration
     if (!userAcceptedTerms) {
-      toast({ title: "Requirement Unmet", description: "You must accept the terms to register.", variant: "destructive" });
+      toast({ 
+        title: "Decree Not Accepted", 
+        description: "You must accept the terms and conditions before proceeding.", 
+        variant: "destructive" 
+      });
       return;
     }
 
@@ -112,6 +115,7 @@ const EventDetailPage: React.FC = () => {
       if (json.success) {
         toast({ title: "Mischief Managed! 🎉", description: "Your owl is on its way." });
         setIsRegistering(false);
+        setUserAcceptedTerms(false); // Reset for next use
       }
     } catch (err) {
       toast({ title: "Confirmed!", description: "Check your email for the ticket!" });
@@ -220,40 +224,28 @@ const EventDetailPage: React.FC = () => {
                 ) : (
                   <div className="space-y-4">
                     <div className="p-4 bg-[#fdf5e6] border border-[#d4af37]/30 rounded text-[#3c2a1a] hogwarts-form">
-                        
-                        {/* Terms & Conditions Enforcement */}
-                        <div className="flex items-center space-x-2 mb-6 p-3 bg-[#741b1b]/5 rounded-lg border border-[#741b1b]/10">
+                        <DynamicFormRenderer
+                          fields={event.formFields}
+                          onSubmit={handleFormSubmit}
+                          submitLabel={
+                              event.ticketPrice > 0
+                              ? `Pay Galleons & Enlist`
+                              : "Submit Scroll"
+                          }
+                        />
+
+                        {/* COMPULSORY CHECKBOX BEFORE PAYMENT */}
+                        <div className="flex items-start gap-3 mt-4 pt-4 border-t border-[#741b1b]/20">
                           <Checkbox 
-                            id="terms" 
+                            id="user-terms" 
                             checked={userAcceptedTerms}
                             onCheckedChange={(checked) => setUserAcceptedTerms(checked as boolean)}
-                            className="border-[#741b1b] data-[state=checked]:bg-[#741b1b]"
+                            className="mt-1 border-[#741b1b] data-[state=checked]:bg-[#741b1b]"
                           />
-                          <label
-                            htmlFor="terms"
-                            className="text-xs font-serif italic leading-none text-[#741b1b] cursor-pointer"
-                          >
-                            I solemnly swear that I accept all terms and conditions.
+                          <label htmlFor="user-terms" className="text-xs text-[#741b1b] leading-tight cursor-pointer font-serif italic select-none">
+                            I solemnly swear that I accept all terms and conditions of this gathering.
                           </label>
                         </div>
-
-                        {/* Form only renders when terms are accepted to avoid accidental registration */}
-                        {userAcceptedTerms ? (
-                          <DynamicFormRenderer
-                            fields={event.formFields}
-                            onSubmit={handleFormSubmit}
-                            submitLabel={
-                                event.ticketPrice > 0
-                                ? `Pay Galleons & Enlist`
-                                : "Submit Scroll"
-                            }
-                          />
-                        ) : (
-                          <div className="text-center py-4 space-y-2 opacity-60">
-                            <ShieldCheck className="h-10 w-10 mx-auto text-[#741b1b]/40" />
-                            <p className="text-xs font-serif italic">Accept the decree above to reveal the registration scroll.</p>
-                          </div>
-                        )}
                     </div>
 
                     <Button
