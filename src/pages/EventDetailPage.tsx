@@ -244,7 +244,7 @@ const EventDetailPage: React.FC = () => {
                             className="mt-1 border-[#741b1b] data-[state=checked]:bg-[#741b1b]"
                           />
                           <label htmlFor="user-terms" className="text-[10px] text-[#741b1b] leading-tight cursor-pointer font-serif italic select-none">
-                            I solemnly swear that I accept all terms and conditions of this event and confirm my enlistment.
+                            I accept all terms and conditions of this event and confirm my enlistment.
                           </label>
                         </div>
                     </div>
@@ -275,3 +275,4 @@ const EventDetailPage: React.FC = () => {
 };
 
 export default EventDetailPage;
+
