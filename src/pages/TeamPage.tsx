@@ -8,21 +8,21 @@ import { Linkedin, Users, Sparkles, ScrollText, Wand2 } from "lucide-react";
 /* =====================
    TEAM ASSETS (Corrected for src/assets folder)
 ===================== */
-import vikramImg from "@/assets/team/vikram-khade.jpg";
-import sanikaImg from "@/assets/team/sanika-avhad.jpg";
-import siddharthImg from "@/assets/team/siddharth-gawali.jpg";
-import shivanandImg from "@/assets/team/shivanand-potle.jpg";
-import pranavImg from "@/assets/team/pranav-more.jpg";
-import nitinImg from "@/assets/team/nitin-b.png";
-import omImg from "@/assets/team/om-sonawane.PNG";
+import vikramImg from "@/assets/teams/vikram-khade.jpg";
+import sanikaImg from "@/assets/teams/sanika-avhad.jpg";
+import siddharthImg from "@/assets/teams/siddharth-gawali.jpg";
+import shivanandImg from "@/assets/teams/shivanand-potle.jpg";
+import pranavImg from "@/assets/teams/pranav-more.jpg";
+import nitinImg from "@/assets/teams/nitin-b.png";
+import omImg from "@/assets/teams/om-sonawane.PNG";
 import ruchitaImg from "@/assets/team/ruchita-p.jpg";
-import rushikeshImg from "@/assets/team/rushikesh-z.jpg";
-import sarthakImg from "@/assets/team/sarthak-d.jpg";
-import shreyashGImg from "@/assets/team/shreyas-g.jpg";
-import shreyashMImg from "@/assets/team/shreyash-m.jpg";
-import smitaImg from "@/assets/team/smita-swami.jpg";
-import tejaswiniImg from "@/assets/team/tejaswini-e.jpg";
-import vidyaImg from "@/assets/team/vidya-g.jpg";
+import rushikeshImg from "@/assets/teamss/rushikesh-z.jpg";
+import sarthakImg from "@/assets/teams/sarthak-d.jpg";
+import shreyashGImg from "@/assets/teams/shreyas-g.jpg";
+import shreyashMImg from "@/assets/teams/shreyash-m.jpg";
+import smitaImg from "@/assets/teams/smita-swami.jpg";
+import tejaswiniImg from "@/assets/teams/tejaswini-e.jpg";
+import vidyaImg from "@/assets/teams/vidya-g.jpg";
 
 const realTeamMembers = [
   {
@@ -225,3 +225,4 @@ export const TeamPage: React.FC = () => {
     </div>
   );
 };
+
