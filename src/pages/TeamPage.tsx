@@ -12,15 +12,20 @@ import vikramImg from "@/public/assets/team/vikram-khade.jpg";
 import sanikaImg from "@/public/assets/team/sanika-avhad.jpg";
 import siddharthImg from "@/public/assets/team/siddharth-gawali.jpg";
 import shivanandImg from "@/public/assets/team/shivanand-potle.jpg";
-
-// Note: Ensure the files below exist in your local src/assets/team or public/assets/team folder.
-// If a file is missing, Vite will show a build error. 
-// For members without imported images, I have left the strings which will trigger the fallback UI.
+import nitinImg from "@/public/assets/team/nitin-b.png";
+import omImg from "@/public/assets/team/om-sonawane.PNG";
+import ruchitaImg from "@/public/assets/team/ruchita-p.jpg";
+import rushikeshImg from "@/public/assets/team/rushikesh-z.jpg";
+import sarthakImg from "@/public/assets/team/sarthak-d.jpg";
+import shreyashGImg from "@/public/assets/team/shreyas-g.jpg";
+import shreyashMImg from "@/public/assets/team/shreyash-m.jpg";
+import smitaImg from "@/public/assets/team/smita-swami.jpg";
+import tejaswiniImg from "@/public/assets/team/tejaswini-e.jpg";
+import vidyaImg from "@/public/assets/team/vidya-g.jpg";
 
 /* =====================
    REAL TEAM DATA
 ===================== */
-
 const realTeamMembers = [
   /* ===== LEADERSHIP ===== */
   {
@@ -39,14 +44,14 @@ const realTeamMembers = [
     name: "Pranav More",
     role: "Current President",
     bio: "Manages day-to-day operations and ensures smooth functioning.",
-    image: "", // Add import if available
+    image: "", 
     category: "core",
     socialLinks: { linkedin: "https://linkedin.com/in/pranavmore" },
   },
   {
     id: "3",
     name: "Tejas Ghondge",
-    role: "Vice President ",
+    role: "Vice President",
     bio: "Oversees educational programs and workshop delivery.",
     image: "", 
     category: "core",
@@ -75,71 +80,72 @@ const realTeamMembers = [
     name: "OM Sonawane",
     role: "Core Team Member",
     bio: "Plans and executes community events and fundraisers.",
-    image: "", 
+    image: omImg, 
     category: "core",
     socialLinks: { linkedin: "https://linkedin.com/in/omsonawane" },
   },
-  
+ 
+
   /* ===== BOARD OF DIRECTORS ===== */
   {
     id: "7",
     name: "Smita Swami",
-    role: "PR Head",
+    role: "PR HEAD",
     bio: "Education specialist focusing on youth development.",
-    image: "", 
+    image: smitaImg, 
     category: "bod",
     socialLinks: { linkedin: "https://linkedin.com/in/smitaswami" },
   },
-  {
-    id: "8",
-    name: "Devashri Gaud",
-    role: "Board Member",
-    bio: "Strategic advisor with expertise in organizational development.",
-    image: "", 
-    category: "bod",
-    socialLinks: { linkedin: "https://linkedin.com/in/devashrigaud" },
-  },
+  // {
+  //   id: "8",
+  //   name: "Devashri Gaud",
+  //   role: "Board Member",
+  //   bio: "Strategic advisor with expertise in organizational development.",
+  //   image: "", 
+  //   category: "bod",
+  //   socialLinks: { linkedin: "https://linkedin.com/in/devashrigaud" },
+  // },
   {
     id: "9",
     name: "Shreyash Giramkar",
-    role: "CSD ",
+    role: "CSD",
     bio: "Finance expert with background in non-profit management.",
-    image: "", 
+    image: shreyashGImg, 
     category: "bod",
     socialLinks: { linkedin: "https://linkedin.com/in/shreyashgiramkar" },
   },
   {
     id: "10",
     name: "Shreyash Mangle",
-    role: "Documentation Head",
+    role: "DOCUMENTATION HEAD",
     bio: "Community relations specialist with extensive network.",
-    image: "", 
+    image: shreyashMImg, 
     category: "bod",
     socialLinks: { linkedin: "https://linkedin.com/in/shreyashmangle" },
   },
   {
     id: "11",
     name: "Sarthak D",
-    role: "Event Management Head",
-    bio: "Community relations specialist with extensive network.",
-    image: "", 
+    role: "EVENT MANAGEMENT HEAD",
+    bio: "Expert in orchestrating grand gatherings and events.",
+    image: sarthakImg, 
     category: "bod",
     socialLinks: { linkedin: "https://linkedin.com/in/sarthakd" },
   },
   {
     id: "12",
     name: "Vidya Ghodke",
-    role: "Membership Director",
-    bio: "Community relations specialist with extensive network.",
-    image: "", 
+    role: "MEMBERSHIP DIRECTOR",
+    bio: "Focuses on community outreach and wizard enlistment.",
+    image: vidyaImg, 
     category: "bod",
     socialLinks: { linkedin: "https://linkedin.com/in/vidyaghodke" },
   },
   {
     id: "13",
     name: "Smit Nukte",
-    role: "Social Media Head",
-    bio: "Community relations specialist with extensive network.",
+    role: "SOCIAL MEDIA HEAD",
+    bio: "Digital communicator for the Order's message.",
     image: "", 
     category: "bod",
     socialLinks: { linkedin: "https://linkedin.com/in/smitnukte" },
@@ -147,27 +153,53 @@ const realTeamMembers = [
   {
     id: "14",
     name: "shivanand Potle",
-    role: "Technical Head",
-    bio: "Community relations specialist with extensive network.",
+    role: "TECHNICAL TEAM Head",
+    bio: "Master of digital scrolls and technical infrastructure.",
     image: shivanandImg,
     category: "bod",
     socialLinks: { linkedin: "https://linkedin.com/in/shivanandpotle" },
   },
   {
-    id: "15",
-    name: "Adityaraj Kshetre",
-    role: "jounior CSD",
-    bio: "Community relations specialist with extensive network.",
-    image: "", 
+    id: "17",
+    name: "Ruchita P",
+    role: "GRAPHICS TEAM HEAD",
+    bio: "Strategic oversight and community development.",
+    image: ruchitaImg,
     category: "bod",
-    socialLinks: { linkedin: "https://linkedin.com/in/adityarajkshetre" },
+    socialLinks: { linkedin: "#" },
+  },
+  {
+    id: "18",
+    name: "Rushikesh.Z",
+    role: "VIDEO TEAM HEAD",
+    bio: "Expert in coordinating specialized social initiatives.",
+    image: rushikeshImg,
+    category: "bod",
+    socialLinks: { linkedin: "#" },
+  },
+  {
+    id: "19",
+    name: "Tejaswini E",
+    role: "PR TEAM CO-HEAD",
+    bio: "Committed to mental health and well-being advocacy.",
+    image: tejaswiniImg,
+    category: "bod",
+    socialLinks: { linkedin: "#" },
+  },
+    {
+    id: "16",
+    name: "Nitin B",
+    role: "Core Team Member",
+    bio: "Dedicated wizard supporting organizational growth.",
+    image: nitinImg,
+    category: "core",
+    socialLinks: { linkedin: "#" },
   },
 ];
 
 /* =====================
-   Animations (Preserved)
+   Animations & Component Logic (Identical to your provided version)
 ===================== */
-
 const container: Variants = {
   hidden: {},
   show: { transition: { staggerChildren: 0.12 } },
@@ -192,10 +224,6 @@ const cardHover: Variants = {
   },
 };
 
-/* =====================
-   Component
-===================== */
-
 export const TeamPage: React.FC = () => {
   const leadership = realTeamMembers.filter((m) => m.category === "leadership");
   const coreTeam = realTeamMembers.filter((m) => m.category === "core");
@@ -206,7 +234,6 @@ export const TeamPage: React.FC = () => {
       <motion.div variants={cardHover}>
         <Card className="group overflow-hidden border-2 border-[#d4af37] shadow-[5px_5px_0px_#3c2a1a] transition-all duration-500 bg-[#fdf5e6] rounded-none relative">
           <div className="absolute inset-0 opacity-10 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/old-map.png')]"></div>
-          
           <CardContent className="p-0 relative z-10">
             <div className="aspect-square relative overflow-hidden border-b-2 border-[#d4af37] bg-[#1a120b]">
               {member.image ? (
@@ -222,7 +249,6 @@ export const TeamPage: React.FC = () => {
                   </div>
                 </div>
               )}
-
               <div className="absolute inset-0 bg-gradient-to-t from-[#741b1b]/90 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end justify-center pb-4">
                 <div className="flex items-center gap-2">
                   {member.socialLinks?.linkedin && (
@@ -235,19 +261,10 @@ export const TeamPage: React.FC = () => {
                 </div>
               </div>
             </div>
-
             <div className="p-5 text-center">
-              <h3 className="font-serif text-xl font-bold mb-1 text-[#2d1e12]">
-                {member.name}
-              </h3>
-              <p className="text-[#741b1b] text-xs font-bold uppercase tracking-widest mb-2 font-serif italic">
-                {member.role}
-              </p>
-              {member.bio && (
-                <p className="text-[#5d4037] text-sm font-serif italic line-clamp-2 leading-relaxed">
-                  {member.bio}
-                </p>
-              )}
+              <h3 className="font-serif text-xl font-bold mb-1 text-[#2d1e12]">{member.name}</h3>
+              <p className="text-[#741b1b] text-xs font-bold uppercase tracking-widest mb-2 font-serif italic">{member.role}</p>
+              {member.bio && <p className="text-[#5d4037] text-sm font-serif italic line-clamp-2 leading-relaxed">{member.bio}</p>}
             </div>
           </CardContent>
         </Card>
@@ -258,7 +275,6 @@ export const TeamPage: React.FC = () => {
   return (
     <div className="pt-24 min-h-screen bg-[#1a120b] text-[#f3e5ab] selection:bg-[#741b1b] selection:text-white font-serif relative overflow-hidden">
       <div className="absolute inset-0 opacity-10 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/old-map.png')]"></div>
-
       <section className="py-16 relative z-10">
         <motion.div className="container mx-auto px-4 text-center" variants={container} initial="hidden" animate="show">
           <motion.div className="max-w-3xl mx-auto" variants={fadeUp}>
@@ -266,19 +282,11 @@ export const TeamPage: React.FC = () => {
               The Order of <span className="italic">Sambhav</span>
             </h1>
             <p className="text-lg italic text-[#f3e5ab]/70 flex items-center justify-center gap-2">
-              <Wand2 className="h-5 w-5 text-[#d4af37]" />
-              Dedicated wizards committed to transforming the realm.
-              <Wand2 className="h-5 w-5 text-[#d4af37]" />
+              <Wand2 className="h-5 w-5 text-[#d4af37]" /> Dedicated wizards committed to transforming the realm. <Wand2 className="h-5 w-5 text-[#d4af37]" />
             </p>
           </motion.div>
         </motion.div>
       </section>
-
-      {realTeamMembers.length === 0 && (
-        <div className="py-16 text-center text-[#d4af37] italic font-serif">
-          The records of the Order are currently being updated by the Ministry.
-        </div>
-      )}
 
       {leadership.length > 0 && (
         <section className="py-16 relative z-10">
@@ -296,9 +304,7 @@ export const TeamPage: React.FC = () => {
       {coreTeam.length > 0 && (
         <section className="py-16 relative z-10 border-y border-[#d4af37]/10 bg-[#2d1e12]/30">
           <div className="container mx-auto px-4">
-            <h2 className="text-center text-4xl font-bold mb-12 text-[#d4af37]" style={{ fontFamily: "'Hogwarts', serif" }}>
-              The Core Guardians
-            </h2>
+            <h2 className="text-center text-4xl font-bold mb-12 text-[#d4af37]" style={{ fontFamily: "'Hogwarts', serif" }}>The Core Guardians</h2>
             <motion.div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8" variants={container} initial="hidden" whileInView="show" viewport={{ once: true }}>
               {coreTeam.map((member) => <TeamMemberCard key={member.id} member={member} />)}
             </motion.div>
@@ -309,9 +315,7 @@ export const TeamPage: React.FC = () => {
       {bod.length > 0 && (
         <section className="py-16 relative z-10">
           <div className="container mx-auto px-4">
-            <h2 className="text-center text-4xl font-bold mb-12 text-[#d4af37]" style={{ fontFamily: "'Hogwarts', serif" }}>
-              The Council of Directors
-            </h2>
+            <h2 className="text-center text-4xl font-bold mb-12 text-[#d4af37]" style={{ fontFamily: "'Hogwarts', serif" }}>The Council of Directors</h2>
             <motion.div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8" variants={container} initial="hidden" whileInView="show" viewport={{ once: true }}>
               {bod.map((member) => <TeamMemberCard key={member.id} member={member} />)}
             </motion.div>
@@ -322,12 +326,8 @@ export const TeamPage: React.FC = () => {
       <section className="py-24 relative z-10 bg-[#741b1b] text-[#f3e5ab] overflow-hidden border-t-4 border-[#d4af37]">
         <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/old-map.png')]"></div>
         <div className="container mx-auto px-4 text-center relative z-10">
-          <h2 className="text-4xl font-bold mb-6 text-[#d4af37]" style={{ fontFamily: "'Hogwarts', serif" }}>
-            Answer the Call of the Order
-          </h2>
-          <p className="text-[#f3e5ab]/80 max-w-xl mx-auto mb-10 italic text-lg leading-relaxed">
-            We seek brave souls who share our vision to empower and evolve the realm.
-          </p>
+          <h2 className="text-4xl font-bold mb-6 text-[#d4af37]" style={{ fontFamily: "'Hogwarts', serif" }}>Answer the Call of the Order</h2>
+          <p className="text-[#f3e5ab]/80 max-w-xl mx-auto mb-10 italic text-lg leading-relaxed">We seek brave souls who share our vision to empower and evolve the realm.</p>
           <Link to="/membership">
             <Button className="bg-[#d4af37] hover:bg-[#f3e5ab] text-[#1a120b] font-bold py-6 px-10 rounded-none shadow-[4px_4px_0px_#3c1010] active:shadow-none transition-all uppercase tracking-[0.2em] font-serif">
               <ScrollText className="h-5 w-5 mr-3" /> Sign the Membership Scroll
