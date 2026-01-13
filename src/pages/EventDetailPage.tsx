@@ -32,7 +32,7 @@ const EventDetailPage: React.FC = () => {
   );
 
   const [isRegistering, setIsRegistering] = useState(false);
-  const [userAcceptedTerms, setUserAcceptedTerms] = useState(false);
+  const [userAcceptedTerms, setUserAcceptedTerms] = useState(false); // Controlled locally
 
   /* ================= LOADING GUARD ================= */
   if (events.length === 0) {
@@ -67,7 +67,7 @@ const EventDetailPage: React.FC = () => {
 
   /* ================= SUBMIT & VERIFY LOGIC ================= */
   const handleFormSubmit = (data: Record<string, unknown>) => {
-    // Compulsory check: Payment only starts if terms are checked
+    // Strictly block submission if terms are not accepted
     if (!userAcceptedTerms) {
       toast({ 
         title: "Decree Not Accepted", 
@@ -115,6 +115,7 @@ const EventDetailPage: React.FC = () => {
       if (json.success) {
         toast({ title: "Mischief Managed! 🎉", description: "Your owl is on its way." });
         setIsRegistering(false);
+        setUserAcceptedTerms(false); // Reset for clean state
       }
     } catch (err) {
       toast({ title: "Confirmed!", description: "Check your email for the ticket!" });
@@ -225,17 +226,19 @@ const EventDetailPage: React.FC = () => {
                     <div className="p-4 bg-[#fdf5e6] border border-[#d4af37]/30 rounded text-[#3c2a1a] hogwarts-form">
                         
                         {/* Dynamic Form fields render here */}
-                        <DynamicFormRenderer
-                          fields={event.formFields}
-                          onSubmit={handleFormSubmit}
-                          submitLabel={
-                              event.ticketPrice > 0
-                              ? `Pay Galleons & Enlist`
-                              : "Submit Scroll"
-                          }
-                        />
+                        <div className="mb-4">
+                          <DynamicFormRenderer
+                            fields={event.formFields}
+                            onSubmit={handleFormSubmit}
+                            submitLabel={
+                                !userAcceptedTerms 
+                                ? "Accept Terms to Enlist" 
+                                : (event.ticketPrice > 0 ? "Pay Galleons & Enlist" : "Submit Scroll")
+                            }
+                          />
+                        </div>
 
-                        {/* COMPULSORY CHECKBOX: Positioned after the form but visually appears right above the button */}
+                        {/* COMPULSORY CHECKBOX: Positioned AFTER fields but BEFORE internal submit logic */}
                         <div className="flex items-start gap-3 mt-4 pt-4 border-t border-[#741b1b]/20 bg-[#741b1b]/5 p-2 rounded">
                           <Checkbox 
                             id="user-terms" 
@@ -243,8 +246,8 @@ const EventDetailPage: React.FC = () => {
                             onCheckedChange={(checked) => setUserAcceptedTerms(checked as boolean)}
                             className="mt-1 border-[#741b1b] data-[state=checked]:bg-[#741b1b]"
                           />
-                          <label htmlFor="user-terms" className="text-[10px] text-[#741b1b] leading-tight cursor-pointer font-serif italic select-none">
-                            I accept all terms and conditions of this event and confirm my enlistment.
+                          <label htmlFor="user-terms" className="text-[11px] text-[#741b1b] leading-tight cursor-pointer font-serif italic select-none">
+                            I solemnly swear that I accept all terms and conditions of this gathering.
                           </label>
                         </div>
                     </div>
@@ -275,4 +278,3 @@ const EventDetailPage: React.FC = () => {
 };
 
 export default EventDetailPage;
-
