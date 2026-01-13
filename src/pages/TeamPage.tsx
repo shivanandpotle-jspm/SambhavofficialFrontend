@@ -12,6 +12,8 @@ import vikramImg from "@/public/assets/team/vikram-khade.jpg";
 import sanikaImg from "@/public/assets/team/sanika-avhad.jpg";
 import siddharthImg from "@/public/assets/team/siddharth-gawali.jpg";
 import shivanandImg from "@/public/assets/team/shivanand-potle.jpg";
+import pranavImg from "@/public/assets/team/pranav-more.jpg";
+
 import nitinImg from "@/public/assets/team/nitin-b.png";
 import omImg from "@/public/assets/team/om-sonawane.PNG";
 import ruchitaImg from "@/public/assets/team/ruchita-p.jpg";
@@ -44,7 +46,7 @@ const realTeamMembers = [
     name: "Pranav More",
     role: "Current President",
     bio: "Manages day-to-day operations and ensures smooth functioning.",
-    image: "", 
+    image: pranavImg, 
     category: "core",
     socialLinks: { linkedin: "https://linkedin.com/in/pranavmore" },
   },
@@ -53,7 +55,7 @@ const realTeamMembers = [
     name: "Tejas Ghondge",
     role: "Vice President",
     bio: "Oversees educational programs and workshop delivery.",
-    image: "", 
+    image: pranavImg, 
     category: "core",
     socialLinks: { linkedin: "https://linkedin.com/in/tejasghondge" },
   },
@@ -141,15 +143,15 @@ const realTeamMembers = [
     category: "bod",
     socialLinks: { linkedin: "https://linkedin.com/in/vidyaghodke" },
   },
-  {
-    id: "13",
-    name: "Smit Nukte",
-    role: "SOCIAL MEDIA HEAD",
-    bio: "Digital communicator for the Order's message.",
-    image: "", 
-    category: "bod",
-    socialLinks: { linkedin: "https://linkedin.com/in/smitnukte" },
-  },
+  // {
+  //   id: "13",
+  //   name: "Smit Nukte",
+  //   role: "SOCIAL MEDIA HEAD",
+  //   bio: "Digital communicator for the Order's message.",
+  //   image: "", 
+  //   category: "bod",
+  //   socialLinks: { linkedin: "https://linkedin.com/in/smitnukte" },
+  // },
   {
     id: "14",
     name: "shivanand Potle",
@@ -338,3 +340,4 @@ export const TeamPage: React.FC = () => {
     </div>
   );
 };
+
