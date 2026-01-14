@@ -90,12 +90,22 @@ export const GalleryPage: React.FC = () => {
       setIsLoading(true);
       try {
         const imageFilenames = [
-          "bugati.jpg",
-          "mywall.jpg",
-          "shiva.jpeg",
-          "workshop2.jpg",
-          "community1.jpg",
-          "team1.jpg",
+          "aarambh.jpg",
+          "aarambh2.JPG",
+          "aarambh3.JPG",
+          "aarambh4.JPG",
+          "bgmitour.JPG",
+          "foundationday.jpg",
+           "inspirex6.JPG",
+           "inspirex7.JPG",
+           "installation1.jpg",
+           "ndavisit2.jpg",
+          "sahara1.JPG",
+          "sahara2.JPG",
+           "sahara3.JPG",
+           "sahara4.JPG",
+          "traditionalday.jpg",
+          
         ];
 
         const images: GalleryImage[] = imageFilenames.map((filename, index) => {
@@ -304,3 +314,4 @@ export const GalleryPage: React.FC = () => {
     </div>
   );
 };
+
