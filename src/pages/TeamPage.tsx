@@ -72,6 +72,13 @@ const realTeamMembers = [
     category: "bod",
   },
      {
+    id: "20",
+    name: "Sarthak D",
+    role: "EVENT CO-HEAD",
+    image: getTeamImage("sarthak-d.jpg"),
+    category: "bod",
+  },
+     {
     id: "22",
     name: "Shreyash M",
     role: "DOCUMENTATION HEAD",
@@ -198,4 +205,5 @@ export const TeamPage: React.FC = () => {
     </div>
   );
 };
+
 
