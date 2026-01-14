@@ -1,22 +1,21 @@
 import React from "react";
-import { Link } from "react-router-dom";
 import { motion, Variants } from "framer-motion";
 import { Card, CardContent } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
-import { Linkedin, Users, Sparkles, ScrollText, Wand2 } from "lucide-react";
+import { Users } from "lucide-react";
 
 /* =====================
    DYNAMIC ASSET HELPER
-   This function tells Vite to resolve the path dynamically 
-   at build time so it works in production/cloud.
+   Using relative path for images inside src/assets/teams
 ===================== */
 const getTeamImage = (name: string) => {
-  // This looks into your public/assets/teams/ folder
-  return new URL(`/assets/teams/${name}`, import.meta.url).href;
+  // Use ../ if this file is in src/pages/ or src/components/
+  // Use ./ if this file is directly in src/
+  return new URL(`../assets/teams/${name}`, import.meta.url).href;
 };
 
 /* =====================
    REAL TEAM DATA
+   Fixed extensions: Pranav (.jpeg), OM (.PNG), Nitin (.png)
 ===================== */
 const realTeamMembers = [
   {
@@ -26,16 +25,14 @@ const realTeamMembers = [
     bio: "Visionary leader with 10+ years in social entrepreneurship.",
     image: getTeamImage("vikram-khade.jpg"),
     category: "leadership",
-    socialLinks: { linkedin: "https://linkedin.com/in/vikramkhade" },
   },
   {
     id: "2",
     name: "Pranav More",
     role: "Current President",
     bio: "Manages day-to-day operations and ensures smooth functioning.",
-    image: getTeamImage("pranav-more.jpg"), 
+    image: getTeamImage("pranav-more.jpeg"), 
     category: "core",
-    socialLinks: { linkedin: "https://linkedin.com/in/pranavmore" },
   },
   {
     id: "4",
@@ -44,7 +41,6 @@ const realTeamMembers = [
     bio: "Drives brand awareness and digital marketing campaigns.",
     image: getTeamImage("sanika-avhad.jpg"),
     category: "core",
-    socialLinks: { linkedin: "https://linkedin.com/in/sanikaavhad" },
   },
   {
     id: "5",
@@ -53,16 +49,14 @@ const realTeamMembers = [
     bio: "Handles budgeting and financial reporting.",
     image: getTeamImage("siddharth-gawali.jpg"),
     category: "core",
-    socialLinks: { linkedin: "https://linkedin.com/in/siddharthgawali" },
   },
   {
     id: "6",
     name: "OM Sonawane",
     role: "Core Team Member",
     bio: "Plans and executes community events and fundraisers.",
-    image: getTeamImage("om-sonawane.PNG"), // Note: PNG must match GitHub case
+    image: getTeamImage("om-sonawane.PNG"), 
     category: "core",
-    socialLinks: { linkedin: "https://linkedin.com/in/omsonawane" },
   },
   {
     id: "14",
@@ -71,7 +65,6 @@ const realTeamMembers = [
     bio: "Master of digital scrolls and technical infrastructure.",
     image: getTeamImage("shivanand-potle.jpg"),
     category: "bod",
-    socialLinks: { linkedin: "https://linkedin.com/in/shivanandpotle" },
   },
   {
     id: "17",
@@ -79,7 +72,6 @@ const realTeamMembers = [
     role: "GRAPHICS TEAM HEAD",
     image: getTeamImage("ruchita-p.jpg"),
     category: "bod",
-    socialLinks: { linkedin: "#" },
   },
   {
     id: "18",
@@ -87,7 +79,6 @@ const realTeamMembers = [
     role: "VIDEO TEAM HEAD",
     image: getTeamImage("rushikesh-z.jpg"),
     category: "bod",
-    socialLinks: { linkedin: "#" },
   },
   {
     id: "19",
@@ -95,7 +86,6 @@ const realTeamMembers = [
     role: "PR TEAM CO-HEAD",
     image: getTeamImage("tejaswini-e.jpg"),
     category: "bod",
-    socialLinks: { linkedin: "#" },
   },
   {
     id: "16",
@@ -103,18 +93,12 @@ const realTeamMembers = [
     role: "Core Team Member",
     image: getTeamImage("nitin-b.png"),
     category: "core",
-    socialLinks: { linkedin: "#" },
   },
 ];
 
 /* =====================
-   Animations & Component Logic
+   Animations
 ===================== */
-const container: Variants = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.12 } },
-};
-
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 40, filter: "blur(4px)" },
   show: {
@@ -140,8 +124,8 @@ export const TeamPage: React.FC = () => {
   const bod = realTeamMembers.filter((m) => m.category === "bod");
 
   const TeamMemberCard = ({ member }: { member: typeof realTeamMembers[number] }) => (
-    <motion.div variants={fadeUp} initial="initial" whileHover="hover" animate="initial">
-      <motion.div variants={cardHover}>
+    <motion.div variants={fadeUp} initial="hidden" whileInView="show" viewport={{ once: true }}>
+      <motion.div variants={cardHover} initial="initial" whileHover="hover">
         <Card className="group overflow-hidden border-2 border-[#d4af37] shadow-[5px_5px_0px_#3c2a1a] transition-all duration-500 bg-[#fdf5e6] rounded-none relative">
           <div className="absolute inset-0 opacity-10 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/old-map.png')]"></div>
           <CardContent className="p-0 relative z-10">
@@ -151,6 +135,10 @@ export const TeamPage: React.FC = () => {
                   src={member.image}
                   alt={member.name}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 sepia-[0.2]"
+                  onError={(e) => {
+                    // Fallback if image fails to load
+                    (e.target as HTMLImageElement).src = "https://via.placeholder.com/400?text=Member";
+                  }}
                 />
               ) : (
                 <div className="absolute inset-0 flex items-center justify-center">
@@ -171,26 +159,26 @@ export const TeamPage: React.FC = () => {
 
   return (
     <div className="pt-24 min-h-screen bg-[#1a120b] text-[#f3e5ab] font-serif relative overflow-hidden">
-        <div className="container mx-auto px-4 py-16 text-center relative z-10">
-             <h1 className="text-5xl font-bold mb-12 text-[#d4af37]" style={{ fontFamily: "'Hogwarts', serif" }}>The Order of Sambhav</h1>
-             
-             {/* Leadership */}
-             <div className="flex justify-center mb-16">
-                {leadership.map(m => <TeamMemberCard key={m.id} member={m} />)}
-             </div>
-
-             {/* Core Team */}
-             <h2 className="text-3xl mb-8 text-[#d4af37]">Core Team</h2>
-             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 mb-16">
-                {coreTeam.map(m => <TeamMemberCard key={m.id} member={m} />)}
-             </div>
-
-             {/* BOD */}
-             <h2 className="text-3xl mb-8 text-[#d4af37]">Board of Directors</h2>
-             <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
-                {bod.map(m => <TeamMemberCard key={m.id} member={m} />)}
-             </div>
+      <div className="container mx-auto px-4 py-16 text-center relative z-10">
+        <h1 className="text-5xl font-bold mb-12 text-[#d4af37]" style={{ fontFamily: "serif" }}>The Order of Sambhav</h1>
+        
+        {/* Leadership */}
+        <div className="flex justify-center mb-16">
+          {leadership.map(m => <div key={m.id} className="w-full max-w-sm"><TeamMemberCard member={m} /></div>)}
         </div>
+
+        {/* Core Team */}
+        <h2 className="text-3xl mb-8 text-[#d4af37]">Core Team</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 mb-16">
+          {coreTeam.map(m => <TeamMemberCard key={m.id} member={m} />)}
+        </div>
+
+        {/* BOD */}
+        <h2 className="text-3xl mb-8 text-[#d4af37]">Board of Directors</h2>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+          {bod.map(m => <TeamMemberCard key={m.id} member={m} />)}
+        </div>
+      </div>
     </div>
   );
 };
