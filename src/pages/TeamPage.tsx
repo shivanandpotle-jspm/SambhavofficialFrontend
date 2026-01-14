@@ -99,18 +99,19 @@ const realTeamMembers = [
     image: getTeamImage("tejaswini-e.jpg"),
     category: "bod",
   },
-  {
-    id: "16",
-    name: "Nitin B",
-    role: "Core Member",
-    image: getTeamImage("nitin-b.png"),
-    category: "core",
-  },
+
   {
     id: "20",
     name: "Ranjeet K",
     role: "EVENT CO-HEAD",
     image: getTeamImage("ranjeet-k.jpg"),
+    category: "bod",
+  },
+     {
+    id: "16",
+    name: "Nitin B",
+    role: "Core Member",
+    image: getTeamImage("nitin-b.png"),
     category: "bod",
   },
 
@@ -197,3 +198,4 @@ export const TeamPage: React.FC = () => {
     </div>
   );
 };
+
