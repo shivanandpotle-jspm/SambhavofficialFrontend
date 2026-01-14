@@ -5,17 +5,15 @@ import { Users } from "lucide-react";
 
 /* =====================
    DYNAMIC ASSET HELPER
-   Using relative path for images inside src/assets/teams
 ===================== */
 const getTeamImage = (name: string) => {
-  // Use ../ if this file is in src/pages/ or src/components/
-  // Use ./ if this file is directly in src/
+  // If this file is in src/pages/, use ../assets/teams/
+  // If this file is in src/, use ./assets/teams/
   return new URL(`../assets/teams/${name}`, import.meta.url).href;
 };
 
 /* =====================
    REAL TEAM DATA
-   Fixed extensions: Pranav (.jpeg), OM (.PNG), Nitin (.png)
 ===================== */
 const realTeamMembers = [
   {
@@ -38,7 +36,6 @@ const realTeamMembers = [
     id: "4",
     name: "Sanika Avhad",
     role: "Secretary",
-    bio: "Drives brand awareness and digital marketing campaigns.",
     image: getTeamImage("sanika-avhad.jpg"),
     category: "core",
   },
@@ -46,7 +43,6 @@ const realTeamMembers = [
     id: "5",
     name: "Siddharth Gawali",
     role: "Treasurer",
-    bio: "Handles budgeting and financial reporting.",
     image: getTeamImage("siddharth-gawali.jpg"),
     category: "core",
   },
@@ -54,7 +50,6 @@ const realTeamMembers = [
     id: "6",
     name: "OM Sonawane",
     role: "Core Team Member",
-    bio: "Plans and executes community events and fundraisers.",
     image: getTeamImage("om-sonawane.PNG"), 
     category: "core",
   },
@@ -62,8 +57,14 @@ const realTeamMembers = [
     id: "14",
     name: "shivanand Potle",
     role: "TECHNICAL TEAM Head",
-    bio: "Master of digital scrolls and technical infrastructure.",
     image: getTeamImage("shivanand-potle.jpg"),
+    category: "bod",
+  },
+    {
+    id: "21",
+    name: "Adityaraj K",
+    role: "JR. CSD",
+    image: getTeamImage("adityaraj-k.jpg"),
     category: "bod",
   },
   {
@@ -94,11 +95,16 @@ const realTeamMembers = [
     image: getTeamImage("nitin-b.png"),
     category: "core",
   },
+  {
+    id: "20",
+    name: "Ranjeet K",
+    role: "EVENT MANAGEMENT CO-HEAD",
+    image: getTeamImage("ranjeet-k.jpg"),
+    category: "bod",
+  },
+ 
 ];
 
-/* =====================
-   Animations
-===================== */
 const fadeUp: Variants = {
   hidden: { opacity: 0, y: 40, filter: "blur(4px)" },
   show: {
@@ -136,7 +142,6 @@ export const TeamPage: React.FC = () => {
                   alt={member.name}
                   className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110 sepia-[0.2]"
                   onError={(e) => {
-                    // Fallback if image fails to load
                     (e.target as HTMLImageElement).src = "https://via.placeholder.com/400?text=Member";
                   }}
                 />
