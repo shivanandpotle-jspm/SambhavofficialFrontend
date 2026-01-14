@@ -26,7 +26,6 @@ const realTeamMembers = [
     id: "2",
     name: "Pranav More",
     role: "Current President",
-    bio: "Manages day-to-day operations.",
     image: getTeamImage("pranav-more.jpeg"), 
     category: "core",
   },
@@ -51,6 +50,13 @@ const realTeamMembers = [
     image: getTeamImage("om-sonawane.PNG"), 
     category: "core",
   },
+     {
+    id: "23",
+    name: "Shreyas G",
+    role: "CSD",
+    image: getTeamImage("shreyas-g.jpg"),
+    category: "bod",
+  },
   {
     id: "14",
     name: "shivanand Potle",
@@ -63,6 +69,13 @@ const realTeamMembers = [
     name: "Adityaraj K",
     role: "JR. CSD",
     image: getTeamImage("adityaraj-k.jpg"),
+    category: "bod",
+  },
+     {
+    id: "22",
+    name: "Shreyash M",
+    role: "DOCUMENTATION HEAD",
+    image: getTeamImage("shreyash-m.jpg"),
     category: "bod",
   },
   {
@@ -89,9 +102,9 @@ const realTeamMembers = [
   {
     id: "16",
     name: "Nitin B",
-    role: "DOCUMENTATION CO-HEAD",
+    role: "Core Member",
     image: getTeamImage("nitin-b.png"),
-    category: "bod",
+    category: "core",
   },
   {
     id: "20",
@@ -100,6 +113,8 @@ const realTeamMembers = [
     image: getTeamImage("ranjeet-k.jpg"),
     category: "bod",
   },
+
+
 ];
 
 const fadeUp: Variants = {
@@ -126,7 +141,7 @@ export const TeamPage: React.FC = () => {
               <img
                 src={member.image}
                 alt={member.name}
-                className="w-full h-full object-cover grayscale-[0.3] group-hover:grayscale-0 transition-all duration-500"
+                className="w-full h-full object-cover grayscale-[0.2] group-hover:grayscale-0 transition-all duration-500"
                 loading="lazy"
                 onError={(e) => {
                   (e.target as HTMLImageElement).src = "https://via.placeholder.com/400?text=Member";
@@ -154,7 +169,7 @@ export const TeamPage: React.FC = () => {
           The Order of Sambhav
         </h1>
         
-        {/* Leadership - Single Centered Card */}
+        {/* Leadership */}
         <div className="flex justify-center mb-16 px-4">
           {leadership.map(m => (
             <div key={m.id} className="w-full max-w-[280px] sm:max-w-sm">
@@ -163,7 +178,7 @@ export const TeamPage: React.FC = () => {
           ))}
         </div>
 
-        {/* Core Team - 2 Columns on Mobile */}
+        {/* Core Team - 2 Columns Mobile, 3-4 Columns Desktop */}
         <section className="mb-16">
             <h2 className="text-2xl sm:text-3xl mb-6 text-[#d4af37] font-bold border-b border-[#d4af37]/30 pb-2 inline-block">Core Team</h2>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-8">
@@ -171,7 +186,7 @@ export const TeamPage: React.FC = () => {
             </div>
         </section>
 
-        {/* BOD - 2 Columns on Mobile */}
+        {/* BOD - 2 Columns Mobile, 3-4 Columns Desktop */}
         <section className="pb-10">
             <h2 className="text-2xl sm:text-3xl mb-6 text-[#d4af37] font-bold border-b border-[#d4af37]/30 pb-2 inline-block">Board of Directors</h2>
             <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-8">
