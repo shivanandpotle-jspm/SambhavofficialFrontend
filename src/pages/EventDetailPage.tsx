@@ -197,12 +197,16 @@ const EventDetailPage: React.FC = () => {
                 {event.description}
               </p>
 
-              {/* RULE BOOK BUTTON: Positioned directly under description */}
+              {/* RULE BOOK BUTTON: Linked to your Google Drive */}
               <Button
                 asChild
                 className="bg-[#741b1b] hover:bg-[#5a1515] text-[#f3e5ab] font-serif rounded-none border-b-2 border-[#3c1010]"
               >
-                <a href="PASTE_YOUR_LINK_HERE" target="_blank" rel="noopener noreferrer">
+                <a 
+                  href="https://drive.google.com/drive/folders/1zgDDqIgtmsFDo23p3B7zbc2KOZ0Ow8iI?usp=sharing" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                >
                   <BookOpen className="h-4 w-4 mr-2" />
                   Read the Rule Book
                 </a>
@@ -258,7 +262,7 @@ const EventDetailPage: React.FC = () => {
                             className="mt-1 border-[#741b1b] data-[state=checked]:bg-[#741b1b]"
                           />
                           <label htmlFor="user-terms" className="text-[11px] text-[#741b1b] leading-tight cursor-pointer font-serif italic select-none">
-                            I solemnly swear that I accept all terms and conditions of this gathering.
+                           I have read the Rulebook and accept all terms and conditions of this gathering.
                           </label>
                         </div>
                     </div>
