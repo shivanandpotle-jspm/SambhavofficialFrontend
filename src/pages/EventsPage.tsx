@@ -15,7 +15,6 @@ import { Calendar, ArrowRight, Sparkles, ScrollText } from "lucide-react";
 import { useAdmin } from "@/contexts/AdminContext";
 
 /* ================= Animations ================= */
-
 const container: Variants = {
   hidden: {},
   show: { transition: { staggerChildren: 0.12 } },
@@ -25,8 +24,6 @@ const fadeUp: Variants = {
   hidden: { opacity: 0, y: 30 },
   show: { opacity: 1, y: 0, transition: { duration: 0.4 } },
 };
-
-/* ================= Component ================= */
 
 const EventsPage: React.FC = () => {
   const { events } = useAdmin();
@@ -47,9 +44,7 @@ const EventsPage: React.FC = () => {
 
   return (
     <div className="pt-24 min-h-screen bg-[#1a120b] selection:bg-[#741b1b] selection:text-white">
-      {/* Added pb-20 to ensure the last row of cards isn't blocked by the footer */}
       <section className="container mx-auto px-4 pb-20">
-        {/* HEADER SECTION */}
         <div className="text-center mb-12">
             <h1 className="text-4xl font-serif font-bold text-[#d4af37] mb-2 flex items-center justify-center gap-3">
                 <Sparkles />
@@ -59,7 +54,6 @@ const EventsPage: React.FC = () => {
             <p className="text-[#f3e5ab]/70 font-serif italic">Choose your path and enlist for the upcoming gatherings</p>
         </div>
 
-        {/* FILTERS */}
         <div className="flex flex-col sm:flex-row gap-4 mb-12 relative z-10">
           <Input
             placeholder="Search scrolls..."
@@ -83,14 +77,13 @@ const EventsPage: React.FC = () => {
           </Select>
         </div>
 
-        {/* EVENTS GRID */}
         {filteredEvents.length === 0 ? (
           <div className="text-center text-[#d4af37] font-serif italic py-20 border-2 border-dashed border-[#d4af37]/20 rounded-xl">
             No scrolls found in the archives.
           </div>
         ) : (
           <motion.div
-         className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-8 relative z-10"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8 relative z-10"
             variants={container}
             initial="hidden"
             animate="show"
@@ -98,10 +91,8 @@ const EventsPage: React.FC = () => {
             {filteredEvents.map((event) => (
               <motion.div key={event.id} variants={fadeUp}>
                 <Card className="overflow-hidden bg-[#fdf5e6] border-2 border-[#d4af37] hover:shadow-[0_0_20px_rgba(212,175,55,0.4)] transition-all group relative">
-                  {/* Visual Parchment Texture */}
                   <div className="absolute inset-0 opacity-5 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/old-map.png')]"></div>
 
-                  {/* IMAGE */}
                   <div className="aspect-video bg-[#1a120b] overflow-hidden border-b-2 border-[#d4af37]">
                     {event.image ? (
                       <img
@@ -116,7 +107,6 @@ const EventsPage: React.FC = () => {
                     )}
                   </div>
 
-                  {/* CONTENT */}
                   <CardContent className="p-6 relative">
                     <div className="flex items-center gap-2 mb-2">
                         <ScrollText className="h-4 w-4 text-[#741b1b]" />
@@ -159,4 +149,3 @@ const EventsPage: React.FC = () => {
 };
 
 export default EventsPage;
-
