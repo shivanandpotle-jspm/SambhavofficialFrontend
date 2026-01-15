@@ -15,6 +15,7 @@ import {
   ArrowLeft,
   Sparkles,
   ScrollText,
+  BookOpen,
 } from "lucide-react";
 import { useAdmin } from "@/contexts/AdminContext";
 import { DynamicFormRenderer } from "@/components/DynamicFormRenderer";
@@ -32,7 +33,7 @@ const EventDetailPage: React.FC = () => {
   );
 
   const [isRegistering, setIsRegistering] = useState(false);
-  const [userAcceptedTerms, setUserAcceptedTerms] = useState(false); // Controlled locally
+  const [userAcceptedTerms, setUserAcceptedTerms] = useState(false);
 
   /* ================= LOADING GUARD ================= */
   if (events.length === 0) {
@@ -67,7 +68,7 @@ const EventDetailPage: React.FC = () => {
 
   /* ================= SUBMIT & VERIFY LOGIC ================= */
   const handleFormSubmit = (data: Record<string, unknown>) => {
-    // Strictly block submission if terms are not accepted
+    // Compulsory check: Payment only starts if terms are checked
     if (!userAcceptedTerms) {
       toast({ 
         title: "Decree Not Accepted", 
@@ -115,7 +116,7 @@ const EventDetailPage: React.FC = () => {
       if (json.success) {
         toast({ title: "Mischief Managed! 🎉", description: "Your owl is on its way." });
         setIsRegistering(false);
-        setUserAcceptedTerms(false); // Reset for clean state
+        setUserAcceptedTerms(false);
       }
     } catch (err) {
       toast({ title: "Confirmed!", description: "Check your email for the ticket!" });
@@ -192,9 +193,20 @@ const EventDetailPage: React.FC = () => {
                 </div>
               </div>
 
-              <p className="text-[#3c2a1a] leading-relaxed text-lg font-serif first-letter:text-5xl first-letter:font-bold first-letter:text-[#741b1b] first-letter:mr-3 first-letter:float-left">
+              <p className="text-[#3c2a1a] leading-relaxed text-lg font-serif mb-6">
                 {event.description}
               </p>
+
+              {/* RULE BOOK BUTTON: Positioned directly under description */}
+              <Button
+                asChild
+                className="bg-[#741b1b] hover:bg-[#5a1515] text-[#f3e5ab] font-serif rounded-none border-b-2 border-[#3c1010]"
+              >
+                <a href="PASTE_YOUR_LINK_HERE" target="_blank" rel="noopener noreferrer">
+                  <BookOpen className="h-4 w-4 mr-2" />
+                  Read the Rule Book
+                </a>
+              </Button>
             </div>
           </div>
 
@@ -225,7 +237,6 @@ const EventDetailPage: React.FC = () => {
                   <div className="space-y-4">
                     <div className="p-4 bg-[#fdf5e6] border border-[#d4af37]/30 rounded text-[#3c2a1a] hogwarts-form">
                         
-                        {/* Dynamic Form fields render here */}
                         <div className="mb-4">
                           <DynamicFormRenderer
                             fields={event.formFields}
@@ -238,7 +249,7 @@ const EventDetailPage: React.FC = () => {
                           />
                         </div>
 
-                        {/* COMPULSORY CHECKBOX: Positioned AFTER fields but BEFORE internal submit logic */}
+                        {/* COMPULSORY CHECKBOX: Positioned AFTER fields but BEFORE internal submit button */}
                         <div className="flex items-start gap-3 mt-4 pt-4 border-t border-[#741b1b]/20 bg-[#741b1b]/5 p-2 rounded">
                           <Checkbox 
                             id="user-terms" 
