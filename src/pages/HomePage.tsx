@@ -19,24 +19,24 @@ import {
 } from "lucide-react";
 
 /* =====================
-   ASSETS (Imported for Vite Production Build)
+   ASSETS
 ===================== */
-// Importing images ensures Vite hashes them for the cloud
 import slide1 from "@/assets/avinya.jpeg";
-import slide2 from "@/assets/aarambhslide.PNG";
+// Change the physical filename in your folder to lowercase .png
+import slide2 from "@/assets/aarambhslide.png"; 
 import slide3 from "@/assets/slide3.jpeg";
 import sambhavLogo from "@/assets/sambhav_logo.png";
 
 const slides = [
   {
     image: slide1,
-    link: "/events#financial-literacy",
-    label: "Register for Aarambh",
+    link: "/events#entrepreneurship",
+    label: "Register for Avinya 4.0",
   },
   {
     image: slide2,
-    link: "/events#entrepreneurship",
-    label: "Register for Avinya 4.0",
+    link: "/events#financial-literacy",
+    label: "Register for Aarambh",
   },
   {
     image: slide3,
@@ -135,13 +135,10 @@ const pillars = [
   },
 ];
 
-/* =====================
-   COMPONENT
-===================== */
 export const HomePage: React.FC = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
+  const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
 
   const startAutoPlay = () => {
     if (intervalRef.current) clearInterval(intervalRef.current);
@@ -170,10 +167,9 @@ export const HomePage: React.FC = () => {
 
   return (
     <div className="relative overflow-hidden bg-[#1a120b] text-[#f3e5ab] selection:bg-[#741b1b] selection:text-white font-serif">
-      {/* Background Parchment Texture */}
       <div className="absolute inset-0 opacity-10 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/old-map.png')] z-0"></div>
 
-      {/* ================= HERO ================= */}
+      {/* HERO SECTION */}
       <section className="min-h-screen flex items-center relative z-10">
         <div className="container mx-auto px-4 pt-20 pb-12 text-center">
           <motion.div variants={container} initial="hidden" animate="show">
@@ -193,9 +189,7 @@ export const HomePage: React.FC = () => {
 
             <motion.h1
               className="text-center font-serif font-bold mb-4 flex justify-center whitespace-nowrap leading-tight tracking-[0.2em] text-[#d4af37]"
-              style={{ 
-                fontSize: "min(2.8vw, 1.1rem)",
-              }}
+              style={{ fontSize: "min(2.8vw, 1.1rem)" }}
               variants={fadeUp}
             >
               <span className="flex items-center gap-1">
@@ -242,7 +236,6 @@ export const HomePage: React.FC = () => {
               </button>
             </div>
 
-            {/* Event CTA Button */}
             <div className="mt-8 flex justify-center">
               <a
                 href={slides[currentSlide].link}
@@ -281,7 +274,7 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* ================= PILLARS ================= */}
+      {/* PILLARS SECTION */}
       <section className="py-24 relative z-10">
         <div className="container mx-auto px-4">
           <h2 className="text-center font-serif text-5xl font-bold mb-20 text-[#d4af37] drop-shadow-[2px_2px_0px_#741b1b]">
@@ -315,7 +308,7 @@ export const HomePage: React.FC = () => {
         </div>
       </section>
 
-      {/* ================= TESTIMONIALS ================= */}
+      {/* TESTIMONIALS SECTION */}
       <section className="py-24 relative z-10">
         <div className="container mx-auto px-4 text-center">
           <h2 className="font-serif text-4xl font-bold mb-16 text-[#d4af37]">
@@ -352,4 +345,3 @@ export const HomePage: React.FC = () => {
     </div>
   );
 };
-
