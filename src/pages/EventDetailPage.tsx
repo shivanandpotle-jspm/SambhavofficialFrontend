@@ -203,7 +203,7 @@ const EventDetailPage: React.FC = () => {
                 className="bg-[#741b1b] hover:bg-[#5a1515] text-[#f3e5ab] font-serif rounded-none border-b-2 border-[#3c1010]"
               >
                 <a 
-                  href="https://drive.google.com/drive/folders/1zgDDqIgtmsFDo23p3B7zbc2KOZ0Ow8iI?usp=sharing" 
+                  href="https://drive.google.com/drive/folders/1ouQZ2addLpdqgkKYBDkF7FnqAVt26uy7?usp=sharing" 
                   target="_blank" 
                   rel="noopener noreferrer"
                 >
@@ -293,3 +293,4 @@ const EventDetailPage: React.FC = () => {
 };
 
 export default EventDetailPage;
+
