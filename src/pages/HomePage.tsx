@@ -22,8 +22,8 @@ import {
    ASSETS (Imported for Vite Production Build)
 ===================== */
 // Importing images ensures Vite hashes them for the cloud
-import slide1 from "@/assets/slide1.webp";
-import slide2 from "@/assets/slide2.webp";
+import slide1 from "@/assets/avinya.jpeg";
+import slide2 from "@/assets/aarambhslide.PNG";
 import slide3 from "@/assets/slide3.jpeg";
 import sambhavLogo from "@/assets/sambhav_logo.png";
 
@@ -352,3 +352,4 @@ export const HomePage: React.FC = () => {
     </div>
   );
 };
+
