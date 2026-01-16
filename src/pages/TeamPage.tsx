@@ -74,7 +74,7 @@ const realTeamMembers = [
      {
     id: "20",
     name: "Sarthak D",
-    role: "EVENT CO-HEAD",
+    role: "EVENT HEAD",
     image: getTeamImage("sarthak-d.jpg"),
     category: "bod",
   },
@@ -117,7 +117,7 @@ const realTeamMembers = [
      {
     id: "16",
     name: "Nitin B",
-    role: "Core Member",
+    role: "Documentation Co-Head ",
     image: getTeamImage("nitin-b.png"),
     category: "bod",
   },
