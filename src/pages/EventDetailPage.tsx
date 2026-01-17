@@ -70,12 +70,13 @@ const EventDetailPage: React.FC = () => {
     );
   }
 
-  /* ================= PAYMENT FLOW ================= */
+  /* ================= SUBMIT & PAYMENT ================= */
   const handleFormSubmit = async (data: Record<string, unknown>) => {
     if (!userAcceptedTerms) {
       toast({
         title: "Decree Not Accepted",
-        description: "You must accept the terms and conditions before proceeding.",
+        description:
+          "You must accept the terms and conditions before proceeding.",
         variant: "destructive",
       });
       return;
@@ -96,7 +97,7 @@ const EventDetailPage: React.FC = () => {
     const finalAmount = Math.ceil(event.ticketPrice / 0.9764);
 
     try {
-      // 1️⃣ CREATE ORDER (MANDATORY)
+      // ✅ CREATE ORDER (MANDATORY FOR AUTO-CAPTURE)
       const orderRes = await fetch(
         `${import.meta.env.VITE_API_URL}/api/create-order`,
         {
@@ -107,27 +108,30 @@ const EventDetailPage: React.FC = () => {
       );
 
       const orderJson = await orderRes.json();
-      if (!orderJson.success) throw new Error("Order creation failed");
 
-      // 2️⃣ OPEN RAZORPAY WITH ORDER ID
+      if (!orderJson.success) {
+        toast({
+          title: "Payment Error",
+          description: "Unable to create order.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // ✅ OPEN RAZORPAY WITH ORDER ID
       payForEvent(
         event.title,
         finalAmount,
         { name: userName, email: userEmail },
-        async (razorpayResponse: any) => {
-          await verifyAndSave(
-            razorpayResponse,
-            data,
-            userName,
-            userEmail
-          );
+        (response: any) => {
+          verifyAndSave(response, data, userName, userEmail);
         },
         orderJson.order.id
       );
-    } catch (err) {
+    } catch {
       toast({
-        title: "Payment Error",
-        description: "Unable to initiate payment. Try again.",
+        title: "Server Error",
+        description: "Unable to initiate payment.",
         variant: "destructive",
       });
     }
@@ -135,7 +139,7 @@ const EventDetailPage: React.FC = () => {
 
   /* ================= VERIFY & SAVE ================= */
   const verifyAndSave = async (
-    razorpayResponse: any,
+    response: any,
     allFormData: any,
     name: string,
     email: string
@@ -147,9 +151,9 @@ const EventDetailPage: React.FC = () => {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            razorpay_payment_id: razorpayResponse.razorpay_payment_id,
-            razorpay_order_id: razorpayResponse.razorpay_order_id,
-            razorpay_signature: razorpayResponse.razorpay_signature,
+            razorpay_payment_id: response.razorpay_payment_id,
+            razorpay_order_id: response.razorpay_order_id,
+            razorpay_signature: response.razorpay_signature,
             eventTitle: event.title,
             name,
             email,
@@ -159,19 +163,20 @@ const EventDetailPage: React.FC = () => {
       );
 
       const json = await res.json();
-      if (!json.success) throw new Error("Verification failed");
 
-      toast({
-        title: "Mischief Managed! 🎉",
-        description: "Your ticket has been sent to your email.",
-      });
-
-      setIsRegistering(false);
-      setUserAcceptedTerms(false);
+      if (json.success) {
+        toast({
+          title: "Mischief Managed! 🎉",
+          description: "Your owl is on its way.",
+        });
+        setIsRegistering(false);
+        setUserAcceptedTerms(false);
+      }
     } catch {
       toast({
         title: "Payment Successful",
-        description: "If ticket is delayed, please contact support.",
+        description:
+          "If ticket email is delayed, please contact support.",
       });
       setIsRegistering(false);
     }
@@ -194,11 +199,125 @@ const EventDetailPage: React.FC = () => {
         }
       `}</style>
 
-      {/* 🔥 FULL UI BELOW — UNTOUCHED */}
-      {/* (Exactly same as your original JSX) */}
+      <div className="container mx-auto px-4">
+        <Button
+          onClick={() => navigate("/events")}
+          variant="ghost"
+          className="mb-6 text-[#d4af37] hover:bg-[#2d1e12] hover:text-[#f3e5ab] font-serif"
+        >
+          <ArrowLeft className="h-4 w-4 mr-2" />
+          Back to the Common Room
+        </Button>
 
-      {/* --- UI CONTINUES EXACTLY AS BEFORE --- */}
-      {/* I have intentionally not altered a single JSX structure line */}
+        <div className="grid lg:grid-cols-3 gap-8">
+          <div className="lg:col-span-2 space-y-8">
+            <div className="aspect-video rounded-2xl overflow-hidden border-4 border-[#3c2a1a] shadow-[0_10px_30px_rgba(0,0,0,0.5)] bg-[#000]">
+              {event.image ? (
+                <img
+                  src={`/assets/events/${event.image}`}
+                  alt={event.title}
+                  className="w-full h-full object-cover opacity-90 sepia-[0.2]"
+                />
+              ) : (
+                <div className="h-full flex items-center justify-center bg-[#2d1e12]">
+                  <ScrollText className="h-24 w-24 text-[#d4af37]/30" />
+                </div>
+              )}
+            </div>
+
+            <div className="p-8 bg-[#fdf5e6] border-l-8 border-[#741b1b] rounded-r-lg shadow-inner relative overflow-hidden">
+              <div className="absolute inset-0 opacity-10 pointer-events-none bg-[url('https://www.transparenttextures.com/patterns/old-map.png')]"></div>
+
+              <h1 className="text-4xl font-serif font-bold mb-4 text-[#2d1e12] flex items-center gap-3">
+                <Sparkles className="text-[#d4af37]" />
+                {event.title}
+              </h1>
+
+              <div className="flex flex-wrap gap-6 text-[#5d4037] mb-8 font-serif italic border-b border-[#d4af37]/40 pb-4">
+                <div className="flex items-center gap-2">
+                  <Calendar className="h-5 w-5 text-[#741b1b]" />
+                  {new Date(event.date).toLocaleDateString("en-GB")}
+                </div>
+                <div className="flex items-center gap-2">
+                  <Clock className="h-5 w-5 text-[#741b1b]" />
+                  {event.time}
+                </div>
+                <div className="flex items-center gap-2">
+                  <MapPin className="h-5 w-5 text-[#741b1b]" />
+                  {event.location}
+                </div>
+                <div className="flex items-center gap-2">
+                  <Users className="h-5 w-5 text-[#741b1b]" />
+                  {event.maxAttendees} Wizards Max
+                </div>
+              </div>
+
+              <p className="text-[#3c2a1a] leading-relaxed text-lg font-serif mb-6">
+                {event.description}
+              </p>
+
+              <Button
+                asChild
+                className="bg-[#741b1b] hover:bg-[#5a1515] text-[#f3e5ab] font-serif rounded-none border-b-2 border-[#3c1010]"
+              >
+                <a
+                  href="https://drive.google.com/drive/folders/1ouQZ2addLpdqgkKYBDkF7FnqAVt26uy7?usp=sharing"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  <BookOpen className="h-4 w-4 mr-2" />
+                  Read the Rule Book
+                </a>
+              </Button>
+            </div>
+          </div>
+
+          <div>
+            <Card className="sticky top-28 bg-[#f3e5ab] border-2 border-[#d4af37] shadow-[5px_5px_0px_#741b1b] overflow-hidden">
+              <CardHeader className="bg-[#741b1b] text-[#f3e5ab] border-b-2 border-[#d4af37]">
+                <CardTitle className="font-serif tracking-widest uppercase text-center text-sm">
+                  Official Decree
+                </CardTitle>
+              </CardHeader>
+              <CardContent className="pt-6">
+                {!isRegistering ? (
+                  <Button
+                    size="lg"
+                    className="w-full bg-[#741b1b] hover:bg-[#5a1515] text-[#f3e5ab] font-serif text-lg py-6 rounded-none"
+                    onClick={() => setIsRegistering(true)}
+                  >
+                    Enlist Now
+                  </Button>
+                ) : (
+                  <div className="space-y-4">
+                    <DynamicFormRenderer
+                      fields={event.formFields}
+                      onSubmit={handleFormSubmit}
+                      submitLabel={
+                        !userAcceptedTerms
+                          ? "Accept Terms to Enlist"
+                          : "Pay Galleons & Enlist"
+                      }
+                    />
+
+                    <div className="flex items-start gap-3">
+                      <Checkbox
+                        checked={userAcceptedTerms}
+                        onCheckedChange={(v) =>
+                          setUserAcceptedTerms(v as boolean)
+                        }
+                      />
+                      <span className="text-xs">
+                        I accept all terms and conditions
+                      </span>
+                    </div>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+      </div>
     </div>
   );
 };
