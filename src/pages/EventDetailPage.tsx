@@ -117,26 +117,26 @@ const EventDetailPage: React.FC = () => {
     <div className="pt-24 pb-16 min-h-screen bg-[#1a120b]">
       {/* ✅ FIXED STYLE (SINGLE, VALID BLOCK) */}
       <style>{`
-        .hogwarts-form input,
-        .hogwarts-form textarea,
-        .hogwarts-form select {
-          color: #2d1e12 !important;
-          background-color: rgba(255, 255, 255, 0.9) !important;
-          border: 1px solid #d4af37 !important;
-          caret-color: #2d1e12 !important;
-        }
+  input,
+  textarea,
+  select {
+    color: #000000 !important;          /* PURE BLACK TEXT */
+    background-color: #ffffff !important;
+    caret-color: #000000 !important;
+  }
 
-        .hogwarts-form input::placeholder,
-        .hogwarts-form textarea::placeholder {
-          color: #5d4037 !important;
-          opacity: 1;
-        }
+  input::placeholder,
+  textarea::placeholder {
+    color: #555555 !important;
+    opacity: 1 !important;
+  }
 
-        .hogwarts-form label {
-          color: #741b1b !important;
-          font-weight: bold;
-        }
-      `}</style>
+  input:focus,
+  textarea:focus,
+  select:focus {
+    color: #000000 !important;
+  }
+`}</style>
 
       <div className="container mx-auto px-4">
         <div className="grid lg:grid-cols-3 gap-8">
