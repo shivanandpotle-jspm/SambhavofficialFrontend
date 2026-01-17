@@ -196,8 +196,22 @@ const EventDetailPage: React.FC = () => {
         .hogwarts-form label {
           color: #741b1b !important;
           font-weight: bold;
-        }
-      `}</style>
+        
+      `}
+{`
+  .hogwarts-form input,
+  .hogwarts-form textarea,
+  .hogwarts-form select {
+    color: #2d1e12 !important;
+    background-color: rgba(255, 255, 255, 0.5) !important;
+    border: 1px solid #d4af37 !important;
+  }
+  .hogwarts-form label {
+    color: #741b1b !important;
+    font-weight: bold;
+  }
+`}
+</style>
 
       <div className="container mx-auto px-4">
         <Button
