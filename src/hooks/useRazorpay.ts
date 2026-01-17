@@ -11,11 +11,7 @@ interface UserDetails {
   email: string;
 }
 
-type SuccessCallback = (result: {
-  razorpay_payment_id: string;
-  razorpay_order_id: string;
-  razorpay_signature: string;
-}) => void | Promise<void>;
+type SuccessCallback = (response: any) => void | Promise<void>;
 
 export const useRazorpay = (key: string) => {
   useEffect(() => {
@@ -28,44 +24,39 @@ export const useRazorpay = (key: string) => {
     document.body.appendChild(script);
   }, []);
 
-  const payForEvent = async (
+  const payForEvent = (
     title: string,
     amount: number,
     user: UserDetails,
-    onSuccess: SuccessCallback
+    onSuccess: SuccessCallback,
+    orderId: string
   ) => {
-    const res = await fetch(
-      `${import.meta.env.VITE_API_URL}/api/create-order`,
-      {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          amount,
-          name: user.name,
-          email: user.email,
-          eventTitle: title,
-        }),
-      }
-    );
-
-    const data = await res.json();
-    if (!data.success) {
-      alert("Failed to create order");
+    if (!window.Razorpay) {
+      alert("Razorpay SDK failed to load");
       return;
     }
 
     const options = {
       key,
-      order_id: data.order.id,
-      amount: data.order.amount,
+      amount: amount * 100,
       currency: "INR",
       name: "Sambhav",
       description: title,
-      prefill: user,
-      handler: onSuccess,
+      order_id: orderId, // ✅ THIS FIXES AUTO-CAPTURE
+      prefill: {
+        name: user.name,
+        email: user.email,
+      },
+      handler: async (response: any) => {
+        await onSuccess(response);
+      },
+      theme: {
+        color: "#7c3aed",
+      },
     };
 
-    new window.Razorpay(options).open();
+    const razorpay = new window.Razorpay(options);
+    razorpay.open();
   };
 
   return { payForEvent };
