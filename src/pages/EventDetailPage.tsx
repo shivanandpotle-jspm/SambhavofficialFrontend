@@ -235,9 +235,10 @@ const EventDetailPage: React.FC = () => {
                 {event.title}
               </h1>
 
-              <p className="text-[#3c2a1a] leading-relaxed text-lg font-serif mb-6">
-                {event.description}
-              </p>
+<p className="whitespace-pre-line text-[#3c2a1a] leading-relaxed text-lg font-serif mb-6">
+  {event.description}
+</p>
+
 
               <Button
                 asChild
