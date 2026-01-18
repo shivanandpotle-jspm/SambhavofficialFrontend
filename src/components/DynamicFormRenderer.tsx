@@ -18,8 +18,10 @@ export const DynamicFormRenderer = ({ fields, onSubmit, submitLabel = 'Submit' }
     fields.forEach((f: any) => {
       const label = f.label.toLowerCase();
       if (f.type === 'email' || label.includes('email')) dataWithStandardKeys.email = rawData[f.id];
-      if (label.includes('name')) dataWithStandardKeys.name = rawData[f.id];
-    });
+     if (label.includes('member') && label.includes('name')) {
+  dataWithStandardKeys.name = rawData[f.id];
+}
+
 
     onSubmit(dataWithStandardKeys);
   };
@@ -49,3 +51,4 @@ export const DynamicFormRenderer = ({ fields, onSubmit, submitLabel = 'Submit' }
     </form>
   );
 };
+
