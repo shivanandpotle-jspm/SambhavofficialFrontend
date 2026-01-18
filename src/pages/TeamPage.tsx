@@ -29,6 +29,14 @@ const realTeamMembers = [
     image: getTeamImage("pranav-more.jpeg"), 
     category: "core",
   },
+
+     {
+    id: "24",
+    name: "Tejas Ghondage",
+    role: "Vice President President",
+    image: getTeamImage("tejas-g.jpeg"), 
+    category: "core",
+  },
   {
     id: "4",
     name: "Sanika Avhad",
@@ -46,10 +54,19 @@ const realTeamMembers = [
   {
     id: "6",
     name: "OM Sonawane",
-    role: "Core Team Member",
+    role: "Founding Team Member",
     image: getTeamImage("om-sonawane.PNG"), 
     category: "core",
   },
+     {
+    id: "25",
+    name: "Smita Swami",
+    role: "PR TEAM HEAD",
+    image: getTeamImage("smita-swami.jpg"),
+    category: "bod",
+  },
+
+   
      {
     id: "23",
     name: "Shreyas G",
@@ -205,5 +222,6 @@ export const TeamPage: React.FC = () => {
     </div>
   );
 };
+
 
 
