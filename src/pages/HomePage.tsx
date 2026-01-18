@@ -23,7 +23,7 @@ import {
 ===================== */
 import slide1 from "@/assets/avinya.jpeg";
 // Change the physical filename in your folder to lowercase .png
-import slide2 from "@/assets/heroimg.jpg"; 
+import slide2 from "@/assets/heroimg5.png"; 
 import slide3 from "@/assets/hero2img.jpeg";
 import sambhavLogo from "@/assets/sambhav_logo.png";
 
@@ -345,6 +345,7 @@ export const HomePage: React.FC = () => {
     </div>
   );
 };
+
 
 
 
