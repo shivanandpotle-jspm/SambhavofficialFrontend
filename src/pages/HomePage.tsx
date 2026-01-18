@@ -47,19 +47,46 @@ const slides = [
 
 const testimonials = [
   {
-    name: "Priya Mehta",
-    role: "Workshop Guest",
-    quote: "Sambhav Foundation creates real impact. Their financial literacy session changed how I manage my money.",
+    name: "Dr. Prakash Amte",
+    role: "Padma Shri Awardee & Social Servant",
+    quote:
+      "Sambhav represents the true spirit of social responsibility among youth. Their work shows awareness, compassion, and a genuine intent to create positive change in society.",
   },
   {
-    name: "Rohit Sharma",
-    role: "Entrepreneur & Speaker",
-    quote: "The energy, vision, and execution of Sambhav is inspiring. A truly purpose-driven organization.",
+    name: "Sanjay Katkar",
+    role: "Co-founder, Quick Heal",
+    quote:
+      "Sambhav reflects the mindset of future leaders—curious, responsible, and impact-driven. Their approach to learning and innovation is exactly what today’s ecosystem needs.",
   },
   {
-    name: "Dr. Ananya Kulkarni",
-    role: "Mental Health Expert",
-    quote: "Their focus on physical and mental well-being is rare and much needed. Sambhav is doing remarkable work.",
+    name: "Aarya Jadhav",
+    role: "Bigg Boss Marathi Contestant",
+    quote:
+      "The energy and creativity at Sambhav events are truly inspiring. It’s wonderful to see students expressing confidence, talent, and teamwork on such a vibrant platform.",
+  },
+  {
+    name: "Prof. Rounak Khabe",
+    role: "Engineer & Educator",
+    quote:
+      "Sambhav effectively connects academic learning with real-world application. Their initiatives encourage students to think critically, creatively, and responsibly.",
+  },
+  {
+    name: "Girish Prabhune",
+    role: "Padma Shri Awardee & Social Servant",
+    quote:
+      "Sambhav is nurturing socially aware individuals who understand service beyond words. Their consistent efforts reflect discipline, dedication, and a deep sense of responsibility.",
+  },
+  {
+    name: "Sahil Horane",
+    role: "Stand-up Comedian",
+    quote:
+      "Sambhav creates an environment where learning feels natural and fun. Their events encourage expression, confidence, and originality without pressure.",
+  },
+  {
+    name: "Sharad Tandle",
+    role: "Writer & Businessman",
+    quote:
+      "Sambhav stands out for its thoughtful vision and execution. They are shaping a generation that values creativity, ethics, and leadership together.",
   },
 ];
 
@@ -345,6 +372,7 @@ export const HomePage: React.FC = () => {
     </div>
   );
 };
+
 
 
 
