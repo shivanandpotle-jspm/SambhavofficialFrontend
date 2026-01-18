@@ -33,7 +33,7 @@ const realTeamMembers = [
      {
     id: "24",
     name: "Tejas Ghondage",
-    role: "Vice President President",
+    role: "Vice President ",
     image: getTeamImage("tejas-g.jpeg"), 
     category: "core",
   },
@@ -222,6 +222,7 @@ export const TeamPage: React.FC = () => {
     </div>
   );
 };
+
 
 
 
