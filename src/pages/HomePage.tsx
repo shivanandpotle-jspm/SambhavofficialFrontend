@@ -24,7 +24,7 @@ import {
 import slide1 from "@/assets/avinya.jpeg";
 // Change the physical filename in your folder to lowercase .png
 import slide2 from "@/assets/heroimg6.png"; 
-import slide3 from "@/assets/hero2img.jpeg";
+// import slide3 from "@/assets/hero2img.jpeg";
 import sambhavLogo from "@/assets/sambhav_logo.png";
 
 const slides = [
@@ -38,11 +38,11 @@ const slides = [
     link: "/events#financial-literacy",
     label: "Register for Aarambh",
   },
-  {
-    image: slide3,
-    link: "/events#mental-health",
-    label: "view Avinya",
-  },
+  // {
+  //   image: slide3,
+  //   link: "/events#mental-health",
+  //   label: "view Avinya",
+  // },
 ];
 
 const testimonials = [
@@ -345,6 +345,7 @@ export const HomePage: React.FC = () => {
     </div>
   );
 };
+
 
 
 
